@@ -3,17 +3,25 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
+import 'package:delivery_app/features/parcel_owner/parcel_owner_home/model/parcel_owner_home_model.dart';
 import 'package:delivery_app/share/widgets/network_image/custom_network_image.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
 
 class ActiveParcelCard extends StatelessWidget {
-  final Map<String, dynamic> activeParcel;
+  final ParcelItem parcelItem;
 
-  const ActiveParcelCard({super.key, required this.activeParcel});
+  const ActiveParcelCard({super.key, required this.parcelItem});
 
   @override
   Widget build(BuildContext context) {
+    final String imageUrl = parcelItem.parcelImages?.isNotEmpty == true
+        ? parcelItem.parcelImages!.first
+        : "https://img.freepik.com/free-photo/cardboard-box-isolated_125540-652.jpg";
+
+    final String route =
+        "${parcelItem.pickupLocation?.address ?? 'N/A'} to ${parcelItem.handoverLocation?.address ?? 'N/A'}";
+
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
@@ -35,7 +43,7 @@ class ActiveParcelCard extends StatelessWidget {
         children: [
           CustomNetworkImage(
             borderRadius: BorderRadius.circular(8.r),
-            imageUrl: activeParcel['image'],
+            imageUrl: imageUrl,
             width: 80.w,
             height: 80.w,
           ),
@@ -51,7 +59,7 @@ class ActiveParcelCard extends StatelessWidget {
                       onTap: () {
                         AppRouter.route.pushNamed(
                           RoutePath.trackParcelOwnerScreen,
-                          extra: activeParcel,
+                          extra: parcelItem.toJson(),
                         );
                       },
                       child: Container(
@@ -78,7 +86,7 @@ class ActiveParcelCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        "Parcel ID: ${activeParcel['id']}",
+                        "Parcel ID: ${parcelItem.parcelId ?? 'N/A'}",
                         style: context.labelLarge.copyWith(
                           color: AppColors.primaryColor,
                           fontWeight: FontWeight.bold,
@@ -90,7 +98,7 @@ class ActiveParcelCard extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  activeParcel['route'],
+                  route,
                   style: context.bodySmall.copyWith(
                     color: AppColors.grayTextSecondaryColor,
                   ),
@@ -106,7 +114,7 @@ class ActiveParcelCard extends StatelessWidget {
                   ),
                   child: FractionallySizedBox(
                     alignment: Alignment.centerLeft,
-                    widthFactor: activeParcel['progress'],
+                    widthFactor: 0.6,
                     child: Container(
                       decoration: BoxDecoration(
                         color: AppColors.primaryColor,
@@ -128,7 +136,7 @@ class ActiveParcelCard extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: activeParcel['status'],
+                              text: parcelItem.status ?? 'N/A',
                               style: context.bodySmall.copyWith(
                                 color: AppColors.success,
                                 fontWeight: FontWeight.bold,

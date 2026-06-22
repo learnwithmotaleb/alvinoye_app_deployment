@@ -3,7 +3,6 @@ import 'package:delivery_app/helper/toast/toast_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:delivery_app/core/custom_assets/assets.gen.dart';
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/helper/validator/text_field_validator.dart';
@@ -239,7 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Gap(26),
 
-                /// ---------- Social Icons ---------- 
+                /// ---------- Social Icons ----------
                 /*
                  
                  Row(

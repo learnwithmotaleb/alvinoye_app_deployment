@@ -46,3 +46,6 @@ app.*.map.json
 
 # Google Maps API Key
 lib/utils/config/app_config.dart
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat

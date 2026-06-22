@@ -251,18 +251,7 @@ class ParcelOwnerHomeScreen extends StatelessWidget {
         );
       }
 
-      return ActiveParcelCard(
-        activeParcel: {
-          "id": item.parcelId ?? "",
-          "image": item.parcelImages?.isNotEmpty == true
-              ? item.parcelImages!.first
-              : "https://img.freepik.com/free-photo/cardboard-box-isolated_125540-652.jpg",
-          "route":
-              "${item.pickupLocation?.address ?? 'N/A'} to ${item.handoverLocation?.address ?? 'N/A'}",
-          "status": item.status ?? "N/A",
-          "progress": 0.6,
-        },
-      );
+      return ActiveParcelCard(parcelItem: item);
     });
   }
 }

@@ -2,7 +2,7 @@ import 'package:delivery_app/utils/config/app_config.dart';
 
 class ApiUrls {
   static const base = AppConfig.baseURL;
-  static String socketUrl() => 'https://whxmt66k-5000.inc1.devtunnels.ms';
+  static String socketUrl() => 'http://13.63.95.203:5000';
   static String login() => '$base/v1/auth/login';
   static String register() => '$base/v1/auth/register';
   static String verifyOtp() => '$base/v1/auth/verify-otp';
@@ -41,7 +41,7 @@ class ApiUrls {
   static String logout() => '$base/v1/auth/logout';
 
   //============== Driver===================
-  
+
   static String getDriverInfo() => '$base/v1/driver/get-driver-info';
   static String updateDriverInfo() => '$base/v1/driver/update-info';
   static String registerDriver() => '$base/v1/driver/info';
@@ -67,7 +67,7 @@ class ApiUrls {
   static String getNotification({required int pageKey}) =>
       '$base/v1/notifications/get-all?page=$pageKey&limit=10';
 
-
   static String chatInitiateP2P() => '$base/v1/chat/initiate-p2p';
-  static String acceptParcel({required String id}) => '$base/v1/driver/accept-parcel/$id';
+  static String acceptParcel({required String id}) =>
+      '$base/v1/driver/accept-parcel/$id';
 }

@@ -8,7 +8,6 @@ import 'package:delivery_app/utils/multipart/multipart_body.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:delivery_app/core/di/injection.dart';
 
 class ChatController extends GetxController {

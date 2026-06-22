@@ -157,8 +157,9 @@ class ParcelItem {
     "pickup_location": pickupLocation?.toJson(),
     "handover_location": handoverLocation?.toJson(),
     "priority": priority,
-    "date":
-        "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
+    "date": date != null
+        ? "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}"
+        : null,
     "time": time,
     "parcel_images": parcelImages == null
         ? []

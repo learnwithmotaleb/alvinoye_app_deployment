@@ -29,6 +29,12 @@ class _TrackParcelScreenState extends State<TrackParcelScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    Get.delete<TrackParcelController>();
+    super.dispose();
+  }
+
   void _showDetailsBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
