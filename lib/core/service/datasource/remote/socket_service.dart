@@ -18,8 +18,10 @@ class SocketApi {
       debugPrint('Socket is already initialized and connected.');
       return;
     }
+
     final LocalService localService = sl<LocalService>();
-    String token = await localService.getToken();
+
+    String token = localService.getToken();
     String id = await localService.getUserId();
     if (token.isEmpty || token == "null" || id.isEmpty || id == "null") {
       debugPrint(
@@ -37,7 +39,7 @@ class SocketApi {
           .setReconnectionAttempts(5)
           .setTimeout(10000)
           .setExtraHeaders({'Authorization': 'Bearer $token'})
-          .setAuth({'userId': id,})
+          .setAuth({'userId': id})
           .build(),
     );
 

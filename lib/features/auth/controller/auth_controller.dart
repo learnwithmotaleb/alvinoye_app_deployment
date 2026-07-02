@@ -233,22 +233,22 @@ class AuthController extends GetxController {
         final isEmailVerified = data['user']['is_verified'] as bool? ?? false;
 
         await localService.saveUserdata(
-          token: token,
-          refreshToken: refreshToken,
+          token: token.toString(),
+          refreshToken: refreshToken.toString(),
           id: userId,
           role: role,
         );
+
+        // VERIFY STORAGE WRITE
+        final savedToken = await localService.getToken();
+        AppConfig.logger.i("Saved token: $savedToken");
         await localService.saveStatus(status);
         await localService.saveIsProfileCompleted(isProfileCompleted);
         await localService.saveIsEmailVerified(isEmailVerified);
         await localService.saveEmail(email);
 
         if (!isEmailVerified) {
-          final body = {
-            "email": email,
-            "isSignUp": true,
-            "token": token,
-          };
+          final body = {"email": email, "isSignUp": true, "token": token};
           AppRouter.route.pushNamed(RoutePath.activeOtpScreen, extra: body);
           return;
         }

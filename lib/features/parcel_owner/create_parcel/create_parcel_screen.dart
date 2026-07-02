@@ -4,11 +4,7 @@ import 'package:delivery_app/features/driver/commuter_registration/models/record
 import 'package:delivery_app/features/driver/commuter_registration/widgets/image_picker_box.dart';
 import 'package:delivery_app/features/parcel_owner/create_parcel/controller/create_parcel_controller.dart';
 import 'package:delivery_app/features/parcel_owner/create_parcel/widgets/selected_image_container.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:delivery_app/helper/date_converter/date_converter.dart';
 import 'package:delivery_app/helper/validator/text_field_validator.dart';
 import 'package:delivery_app/share/widgets/align/custom_align_text.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
@@ -18,8 +14,14 @@ import 'package:delivery_app/share/widgets/text_field/description_text_field.dar
 import 'package:delivery_app/utils/app_strings/app_strings.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
-import 'package:delivery_app/helper/date_converter/date_converter.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:map_location_picker/map_location_picker.dart';
+
+import '../../../utils/config/app_config.dart';
 
 class CreateParcelScreen extends StatefulWidget {
   const CreateParcelScreen({super.key});
@@ -385,7 +387,7 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
       MaterialPageRoute(
         builder: (context) => MapLocationPicker(
           config: MapLocationPickerConfig(
-            apiKey: "AIzaSyAbmRHOMGItXC6dcajVKckbBpsrygRouts",
+            apiKey: AppConfig.googleApiKey,
             initialPosition: const LatLng(-22.3285, 24.6849),
             onNext: (result) {
               if (result != null) {
@@ -403,7 +405,7 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
             },
           ),
           searchConfig: const SearchConfig(
-            apiKey: "AIzaSyAbmRHOMGItXC6dcajVKckbBpsrygRouts",
+            apiKey: AppConfig.googleApiKey,
             searchHintText: "Search for a location",
           ),
         ),

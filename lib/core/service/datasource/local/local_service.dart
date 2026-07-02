@@ -1,60 +1,75 @@
 import 'package:delivery_app/utils/enum/app_enum.dart';
 import 'package:delivery_app/utils/local/local_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../../helper/logger/app_logger.dart';
 
 class LocalService {
-  Future<SharedPreferences> get _prefs async =>
-      await SharedPreferences.getInstance();
+  static SharedPreferences? _prefs;
 
-  Future<String> getToken() async {
-    final prefs = await _prefs;
-    return prefs.getString(LocalKeys.token) ?? "";
+  static Future<void> init() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
+  static SharedPreferences get _instance {
+    if (_prefs == null) {
+      throw Exception("LocalService not initialized");
+    }
+    return _prefs!;
+  }
+
+  String getToken() {
+    return _prefs!.getString(LocalKeys.token) ?? "";
+  }
+
+  // Future<String> getToken() async {
+  //   final prefs = await _prefs;
+  //   return prefs!.getString(LocalKeys.token) ?? "";
+  // }
+
   Future<String> getRole() async {
-    final prefs = await _prefs;
-    return prefs.getString(LocalKeys.role) ?? "";
+    final prefs = _prefs;
+    return prefs!.getString(LocalKeys.role) ?? "";
   }
 
   Future<String> getRefreshToken() async {
-    final prefs = await _prefs;
-    return prefs.getString(LocalKeys.refreshToken) ?? "";
+    final prefs = _prefs;
+    return prefs!.getString(LocalKeys.refreshToken) ?? "";
   }
 
   Future<String> getUserId() async {
-    final prefs = await _prefs;
-    return prefs.getString(LocalKeys.userId) ?? "";
+    final prefs = _prefs;
+    return prefs!.getString(LocalKeys.userId) ?? "";
   }
 
   Future<String> getStatus() async {
-    final prefs = await _prefs;
-    return prefs.getString(LocalKeys.status) ?? "";
+    final prefs = _prefs;
+    return prefs!.getString(LocalKeys.status) ?? "";
   }
 
   Future<bool> getIsProfileCompleted() async {
-    final prefs = await _prefs;
-    return prefs.getBool(LocalKeys.isProfileCompleted) ?? false;
+    final prefs = _prefs;
+    return prefs!.getBool(LocalKeys.isProfileCompleted) ?? false;
   }
 
   Future<bool> getIsEmailVerified() async {
-    final prefs = await _prefs;
-    return prefs.getBool(LocalKeys.isEmailVerified) ?? false;
+    final prefs = _prefs;
+    return prefs!.getBool(LocalKeys.isEmailVerified) ?? false;
   }
 
   Future<String> getEmail() async {
-    final prefs = await _prefs;
-    return prefs.getString(LocalKeys.email) ?? "";
+    final prefs = _prefs;
+    return prefs!.getString(LocalKeys.email) ?? "";
   }
 
   Future<bool> isViewOnboarding() async {
-    final prefs = await _prefs;
-    return prefs.getBool(LocalKeys.onboarding) ?? false;
+    final prefs = _prefs;
+    return prefs!.getBool(LocalKeys.onboarding) ?? false;
   }
 
   Future<String> getLanguage() async {
-    final prefs = await _prefs;
-    return prefs.getString(LocalKeys.languageKey) ?? "";
+    final prefs = _prefs;
+    return prefs!.getString(LocalKeys.languageKey) ?? "";
   }
 
   Future<bool> saveUserdata({
@@ -64,9 +79,9 @@ class LocalService {
     required String role,
   }) async {
     try {
-      final prefs = await _prefs;
+      final prefs = _prefs;
       final success =
-          await prefs.setString(LocalKeys.token, token) &&
+          await prefs!.setString(LocalKeys.token, token) &&
           await prefs.setString(LocalKeys.refreshToken, refreshToken) &&
           await prefs.setString(LocalKeys.userId, id) &&
           await prefs.setString(LocalKeys.role, role);
@@ -86,8 +101,8 @@ class LocalService {
 
   Future<bool> saveToken({required String token}) async {
     try {
-      final prefs = await _prefs;
-      final success = await prefs.setString(LocalKeys.token, token);
+      final prefs = _prefs;
+      final success = await prefs!.setString(LocalKeys.token, token);
       if (!success) {
         AppLogger.log("Failed to save token", type: AppLogType.error);
       }
@@ -100,8 +115,8 @@ class LocalService {
 
   Future<bool> viewOnboarding({required bool isView}) async {
     try {
-      final prefs = await _prefs;
-      final success = await prefs.setBool(LocalKeys.onboarding, isView);
+      final prefs = _prefs;
+      final success = await prefs!.setBool(LocalKeys.onboarding, isView);
       if (!success) {
         AppLogger.log(
           "Failed to save onboarding status",
@@ -120,8 +135,8 @@ class LocalService {
 
   Future<bool> saveLanguage({required String value}) async {
     try {
-      final prefs = await _prefs;
-      final success = await prefs.setString(LocalKeys.languageKey, value);
+      final prefs = _prefs;
+      final success = await prefs!.setString(LocalKeys.languageKey, value);
       if (!success) {
         AppLogger.log("Failed to save language", type: AppLogType.error);
       }
@@ -137,8 +152,8 @@ class LocalService {
 
   Future<bool> saveStatus(String status) async {
     try {
-      final prefs = await _prefs;
-      final success = await prefs.setString(LocalKeys.status, status);
+      final prefs = _prefs;
+      final success = await prefs!.setString(LocalKeys.status, status);
       if (!success) {
         AppLogger.log("Failed to save status", type: AppLogType.error);
       }
@@ -151,8 +166,8 @@ class LocalService {
 
   Future<bool> saveIsProfileCompleted(bool isProfileCompleted) async {
     try {
-      final prefs = await _prefs;
-      final success = await prefs.setBool(
+      final prefs = _prefs;
+      final success = await prefs!.setBool(
         LocalKeys.isProfileCompleted,
         isProfileCompleted,
       );
@@ -174,8 +189,8 @@ class LocalService {
 
   Future<bool> saveIsEmailVerified(bool isEmailVerified) async {
     try {
-      final prefs = await _prefs;
-      final success = await prefs.setBool(
+      final prefs = _prefs;
+      final success = await prefs!.setBool(
         LocalKeys.isEmailVerified,
         isEmailVerified,
       );
@@ -197,25 +212,22 @@ class LocalService {
 
   Future<bool> saveEmail(String email) async {
     try {
-      final prefs = await _prefs;
-      final success = await prefs.setString(LocalKeys.email, email);
+      final prefs = _prefs;
+      final success = await prefs!.setString(LocalKeys.email, email);
       if (!success) {
         AppLogger.log("Failed to save email", type: AppLogType.error);
       }
       return success;
     } catch (e, stack) {
-      AppLogger.log(
-        "Error saving email: $e\n$stack",
-        type: AppLogType.error,
-      );
+      AppLogger.log("Error saving email: $e\n$stack", type: AppLogType.error);
       return false;
     }
   }
 
   Future<bool> logOut() async {
     try {
-      final prefs = await _prefs;
-      final lang = prefs.getString(LocalKeys.languageKey) ?? "";
+      final prefs = _prefs;
+      final lang = prefs!.getString(LocalKeys.languageKey) ?? "";
       final cleared = await prefs.clear();
 
       if (!cleared) {

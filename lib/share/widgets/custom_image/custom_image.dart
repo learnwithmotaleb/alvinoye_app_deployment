@@ -3,88 +3,76 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 enum ImageType { png, svg }
 
-class CustomImage extends StatefulWidget {
+class CustomImage extends StatelessWidget {
   final String imageSrc;
   final Color? imageColor;
   final double? height;
-  final double? scale;
   final double? width;
+  final double? scale;
   final double? sizeWidth;
   final ImageType imageType;
-  final BoxFit? fit;
+  final BoxFit fit;
   final double horizontal;
   final double vertical;
-  final BoxFit? boxFit;
 
   const CustomImage({
+    super.key,
     required this.imageSrc,
     this.imageColor,
-    this.sizeWidth,
-    this.imageType = ImageType.svg,
-    super.key,
-    this.fit,
-    this.scale,
-    this.horizontal = 0.0,
-    this.vertical = 0.0,
-    this.boxFit,
     this.height,
     this.width,
+    this.scale,
+    this.sizeWidth,
+    this.imageType = ImageType.png,
+    this.fit = BoxFit.cover,
+    this.horizontal = 0.0,
+    this.vertical = 0.0,
   });
 
-  @override
-  State<CustomImage> createState() => _CustomImageState();
-}
+  bool get isSvg =>
+      imageType == ImageType.svg || imageSrc.toLowerCase().endsWith(".svg");
 
-class _CustomImageState extends State<CustomImage> {
-  late Widget imageWidget;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  bool get isPng =>
+      imageType == ImageType.png || imageSrc.toLowerCase().endsWith(".png");
 
   @override
   Widget build(BuildContext context) {
-    if (widget.imageSrc.endsWith('svg')) {
-      imageWidget = SvgPicture.asset(
-        widget.imageSrc,
-        // ignore: deprecated_member_use
-        color: widget.imageColor,
-        height: widget.height,
-        width: widget.width,
-        fit: widget.boxFit ?? BoxFit.cover,
-      );
+    if (imageSrc.isEmpty) {
+      return const SizedBox.shrink();
     }
 
-    if (widget.imageType == ImageType.svg) {
-      imageWidget = SvgPicture.asset(
-        widget.imageSrc,
-        // ignore: deprecated_member_use
-        color: widget.imageColor,
-        height: widget.height,
-        width: widget.width,
-        fit: widget.boxFit ?? BoxFit.cover,
-      );
-    }
+    Widget child;
 
-    if (widget.imageSrc.endsWith('png')) {
-      imageWidget = Image.asset(
-        fit: widget.fit,
-        widget.imageSrc,
-        color: widget.imageColor,
-        height: widget.height,
-        width: widget.width,
-        scale: widget.scale ?? 1,
+    if (isSvg) {
+      child = SvgPicture.asset(
+        imageSrc,
+        colorFilter: imageColor != null
+            ? ColorFilter.mode(imageColor!, BlendMode.srcIn)
+            : null,
+        height: height,
+        width: width,
+        fit: fit,
       );
+    } else if (isPng) {
+      child = Image.asset(
+        imageSrc,
+        color: imageColor,
+        height: height,
+        width: width,
+        fit: fit,
+        scale: scale ?? 1,
+        errorBuilder: (_, _, _) {
+          return const Icon(Icons.broken_image);
+        },
+      );
+    } else {
+      child = const Icon(Icons.image_not_supported);
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: widget.horizontal,
-        vertical: widget.vertical,
-      ),
-      width: widget.sizeWidth,
-      child: imageWidget,
+      margin: EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical),
+      width: sizeWidth,
+      child: child,
     );
   }
 }

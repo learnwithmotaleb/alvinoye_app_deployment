@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
@@ -7,6 +5,8 @@ import 'package:delivery_app/share/widgets/custom_image/custom_image.dart';
 import 'package:delivery_app/share/widgets/custom_text/custom_text.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'controller/onboarding_controller.dart';
 
@@ -95,7 +95,7 @@ class OnboardingPageCard extends StatelessWidget {
             return CustomImage(
               width: width,
               height: 235,
-              boxFit: BoxFit.fill,
+              fit: BoxFit.fill,
               imageSrc: _controller
                   .onboardingList[_controller.currentIndex.value]
                   .image,

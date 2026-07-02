@@ -1,11 +1,7 @@
-import 'package:delivery_app/features/auth/controller/auth_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:delivery_app/core/custom_assets/assets.gen.dart';
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
+import 'package:delivery_app/features/auth/controller/auth_controller.dart';
 import 'package:delivery_app/helper/validator/text_field_validator.dart';
 import 'package:delivery_app/share/widgets/align/custom_align_text.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
@@ -14,6 +10,11 @@ import 'package:delivery_app/share/widgets/text_field/custom_text_field.dart';
 import 'package:delivery_app/utils/app_strings/app_strings.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,6 +31,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    if (kDebugMode) {
+      emailSignIn.text = "abc@yopmail.com";
+      passwordSignIn.text = "password123";
+    }
     return Scaffold(
       // appBar: AppBar(
       //   scrolledUnderElevation: 0,
@@ -166,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Gap(24),
 
                             /// ----------- SOCIAL ICONS ------------
-                            
+
                             /*
                              Row(
                               spacing: 24,
@@ -197,7 +203,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               ],
                             ),
                             */
-                            
                             Gap(32),
                           ],
                         ),
