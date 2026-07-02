@@ -19,7 +19,7 @@ class PaymentController extends GetxController {
   Future<String?> createCheckout(String parcelId) async {
     isCreating.value = true;
     try {
-      final token = await localService.getToken();
+      final token = localService.getToken();
       final response = await apiClient.post(
         url: ApiUrls.dpoCheckout(),
         body: {'parcel_id': parcelId},
@@ -47,7 +47,7 @@ class PaymentController extends GetxController {
   Future<bool> verify(String parcelId) async {
     isVerifying.value = true;
     try {
-      final token = await localService.getToken();
+      final token = localService.getToken();
       final response = await apiClient.post(
         url: ApiUrls.dpoVerify(),
         body: {'parcel_id': parcelId},

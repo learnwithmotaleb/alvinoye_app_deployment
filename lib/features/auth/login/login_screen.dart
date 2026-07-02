@@ -33,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     if (kDebugMode) {
-      emailSignIn.text = "abc@yopmail.com";
-      passwordSignIn.text = "password123";
+      emailSignIn.text = "parcel_owner@yopmail.com";
+      passwordSignIn.text = "123456a";
     }
     return Scaffold(
       // appBar: AppBar(

@@ -21,6 +21,7 @@ import 'package:delivery_app/features/driver/parcels/parcels_screen.dart';
 import 'package:delivery_app/features/driver/professional_info/professional_info_edit_screen.dart';
 import 'package:delivery_app/features/driver/professional_info/professional_info_screen.dart';
 import 'package:delivery_app/features/driver/track_parcel/track_parcel_screen.dart';
+import 'package:delivery_app/features/driver/wallet/wallet_screen.dart';
 import 'package:delivery_app/features/notification/view/notification_screen.dart';
 import 'package:delivery_app/features/onboarding/onboarding_screen.dart';
 import 'package:delivery_app/features/other/change_password_screen.dart';
@@ -36,9 +37,8 @@ import 'package:delivery_app/features/parcel_owner/my_parcel/details_my_parcel_s
 import 'package:delivery_app/features/parcel_owner/my_parcel/model/parcel_model.dart';
 import 'package:delivery_app/features/parcel_owner/parcel_owner_nav/parcel_owner_nav_screen.dart';
 import 'package:delivery_app/features/parcel_owner/parcel_owner_review/parcel_owner_review_screen.dart';
-import 'package:delivery_app/features/parcel_owner/payment/payment_screen.dart';
 import 'package:delivery_app/features/parcel_owner/payment/dpo_webview_screen.dart';
-import 'package:delivery_app/features/driver/wallet/wallet_screen.dart';
+import 'package:delivery_app/features/parcel_owner/payment/payment_screen.dart';
 import 'package:delivery_app/features/parcel_owner/refund/refund_screen.dart';
 import 'package:delivery_app/features/parcel_owner/track_parcel_owner/track_parcel_owner_screen.dart';
 import 'package:delivery_app/features/profile/edit_profile_screen.dart';
@@ -46,9 +46,6 @@ import 'package:delivery_app/features/splash/splash_screen.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-
-import '../di/injection.dart';
-import '../service/datasource/local/local_service.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -58,27 +55,6 @@ class AppRouter {
     initialLocation: RoutePath.splashScreen.addBasePath,
     debugLogDiagnostics: true,
     navigatorKey: navigatorKey,
-
-    redirect: (context, state) {
-      final localService = sl<LocalService>();
-      final token = localService.getToken();
-
-      final isLogin =
-          state.matchedLocation == RoutePath.loginScreen.addBasePath;
-      final isSplash =
-          state.matchedLocation == RoutePath.splashScreen.addBasePath;
-
-      if (token.isEmpty) {
-        if (isLogin || isSplash) return null;
-        return RoutePath.loginScreen.addBasePath;
-      }
-
-      if (token.isNotEmpty && isLogin) {
-        return RoutePath.driverNavScreen.addBasePath;
-      }
-
-      return null;
-    },
 
     routes: [
       ///======================= Initial Route =======================

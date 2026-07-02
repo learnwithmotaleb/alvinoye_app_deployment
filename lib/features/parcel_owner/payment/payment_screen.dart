@@ -1,17 +1,17 @@
-import 'package:delivery_app/share/widgets/network_image/custom_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/model/parcel_model.dart';
 import 'package:delivery_app/features/parcel_owner/payment/controller/payment_controller.dart';
 import 'package:delivery_app/helper/toast/toast_helper.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
+import 'package:delivery_app/share/widgets/network_image/custom_network_image.dart';
 import 'package:delivery_app/utils/app_strings/app_strings.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 class PaymentScreen extends StatefulWidget {
   final ParcelItem parcel;
@@ -59,10 +59,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  @override
+@override
   Widget build(BuildContext context) {
     // Get the final price, default to 0 if null
-    final price = double.tryParse('${widget.parcel.finalPrice ?? 0}') ?? 0.0;
+    final price = double.tryParse('${widget.parcel.finalPrice}') ?? 0.0;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,

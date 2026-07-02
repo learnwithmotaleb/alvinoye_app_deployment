@@ -1,14 +1,13 @@
-import 'package:delivery_app/features/parcel_owner/my_parcel/model/parcel_model.dart';
-import 'package:delivery_app/share/widgets/loading/loading_widget.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/controller/my_parcel_controller.dart';
+import 'package:delivery_app/features/parcel_owner/my_parcel/model/parcel_model.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/widgets/parcel_card.dart';
+import 'package:delivery_app/share/widgets/loading/loading_widget.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class MyParcelScreen extends StatefulWidget {
@@ -68,14 +67,17 @@ class _MyParcelScreenState extends State<MyParcelScreen> {
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            _buildPagedList(controller.waitingController),
-            _buildPagedList(controller.pendingController),
-            _buildPagedList(controller.ongoingController),
-            _buildPagedList(controller.completedController),
-            _buildPagedList(controller.rejectedController),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: TabBarView(
+            children: [
+              _buildPagedList(controller.waitingController),
+              _buildPagedList(controller.pendingController),
+              _buildPagedList(controller.ongoingController),
+              _buildPagedList(controller.completedController),
+              _buildPagedList(controller.rejectedController),
+            ],
+          ),
         ),
       ),
     );
