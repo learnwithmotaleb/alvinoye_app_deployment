@@ -79,6 +79,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   );
                                 },
                               ),
+                            if (!isCustomer)
+                              ProfileMenuItem(
+                                title: 'Wallet'.tr,
+                                onTap: () {
+                                  AppRouter.route.pushNamed(
+                                    RoutePath.walletScreen,
+                                  );
+                                },
+                              ),
                             ProfileMenuItem(
                               title: AppStrings.accountSetting.tr,
                               onTap: () {

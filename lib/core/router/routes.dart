@@ -37,6 +37,8 @@ import 'package:delivery_app/features/parcel_owner/my_parcel/model/parcel_model.
 import 'package:delivery_app/features/parcel_owner/parcel_owner_nav/parcel_owner_nav_screen.dart';
 import 'package:delivery_app/features/parcel_owner/parcel_owner_review/parcel_owner_review_screen.dart';
 import 'package:delivery_app/features/parcel_owner/payment/payment_screen.dart';
+import 'package:delivery_app/features/parcel_owner/payment/dpo_webview_screen.dart';
+import 'package:delivery_app/features/driver/wallet/wallet_screen.dart';
 import 'package:delivery_app/features/parcel_owner/refund/refund_screen.dart';
 import 'package:delivery_app/features/parcel_owner/track_parcel_owner/track_parcel_owner_screen.dart';
 import 'package:delivery_app/features/profile/edit_profile_screen.dart';
@@ -566,6 +568,27 @@ class AppRouter {
           final parcel = state.extra as ParcelItem;
           return _buildPageWithAnimation(
             child: PaymentScreen(parcel: parcel),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.dpoWebviewScreen,
+        path: RoutePath.dpoWebviewScreen.addBasePath,
+        pageBuilder: (context, state) {
+          final url = state.extra as String;
+          return _buildPageWithAnimation(
+            child: DpoWebviewScreen(url: url),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.walletScreen,
+        path: RoutePath.walletScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const WalletScreen(),
             state: state,
           );
         },

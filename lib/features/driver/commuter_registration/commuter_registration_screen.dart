@@ -39,6 +39,9 @@ class _CommuterRegistrationScreenState
   final TextEditingController _preferredPickUpPointsController = .new();
   final TextEditingController _notesController = .new();
   final TextEditingController _driverLicenceNumberController = .new();
+  final TextEditingController _bankNameController = .new();
+  final TextEditingController _accountNumberController = .new();
+  final TextEditingController _accountHolderNameController = .new();
   final ValueNotifier<String?> _selectedVehicleType = ValueNotifier(null);
   final List<String> _vehicleTypes = ['Car', 'Bike', 'Truck', 'Van'];
 
@@ -64,6 +67,9 @@ class _CommuterRegistrationScreenState
     _preferredPickUpPointsController.dispose();
     _notesController.dispose();
     _driverLicenceNumberController.dispose();
+    _bankNameController.dispose();
+    _accountNumberController.dispose();
+    _accountHolderNameController.dispose();
     _selectedVehicleType.dispose();
     selectedFromLocation.dispose();
     selectedToLocation.dispose();
@@ -235,6 +241,28 @@ class _CommuterRegistrationScreenState
                   maxLines: 3,
                 ),
                 Gap(16.h),
+
+                // ---- Bank account (payout destination for wallet withdrawals) ----
+                Text('Bank Account (for withdrawals)', style: context.bodyLarge),
+                Gap(8.h),
+                CustomTextField(
+                  title: 'Bank Name',
+                  hintText: 'Enter bank name',
+                  controller: _bankNameController,
+                ),
+                Gap(16.h),
+                CustomTextField(
+                  title: 'Account Number',
+                  hintText: 'Enter account number',
+                  controller: _accountNumberController,
+                ),
+                Gap(16.h),
+                CustomTextField(
+                  title: 'Account Holder Name',
+                  hintText: 'Enter account holder name',
+                  controller: _accountHolderNameController,
+                ),
+                Gap(16.h),
                 Text(AppStrings.numberPlateImage.tr, style: context.bodyLarge),
                 Gap(8.h),
                 Obx(
@@ -337,6 +365,12 @@ class _CommuterRegistrationScreenState
                                 _dailyCommuteTimeController.text,
                             "max_parcel_weight":
                                 _maxParcelWeightController.text,
+                            "bank_details": {
+                              "bank_name": _bankNameController.text,
+                              "account_number": _accountNumberController.text,
+                              "account_holder_name":
+                                  _accountHolderNameController.text,
+                            },
                           },
                           "vehicle": {
                             "vehicle_type": _selectedVehicleType.value ?? "",

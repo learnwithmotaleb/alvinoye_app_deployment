@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/model/parcel_model.dart';
+import 'package:delivery_app/features/parcel_owner/payment/controller/payment_controller.dart';
+import 'package:delivery_app/helper/toast/toast_helper.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
 import 'package:delivery_app/utils/app_strings/app_strings.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
@@ -21,6 +23,41 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   String selectedPaymentMethod = 'online';
+  final PaymentController _paymentController = Get.put(PaymentController());
+
+  Future<void> _onProceedToPay() async {
+    final parcelId = widget.parcel.id;
+    if (parcelId == null || parcelId.isEmpty) {
+      AppToast.error(message: 'Invalid parcel');
+      return;
+    }
+
+    // 1) Create the DPO transaction and get the hosted payment URL.
+    final url = await _paymentController.createCheckout(parcelId);
+    if (url == null) return;
+    if (!mounted) return;
+
+    // 2) Open the payment page in an in-app WebView and await the outcome.
+    final result = await AppRouter.route.pushNamed(
+      RoutePath.dpoWebviewScreen,
+      extra: url,
+    );
+
+    // 3) Verify server-to-server regardless of the reported result.
+    final paid = await _paymentController.verify(parcelId);
+    if (!mounted) return;
+
+    if (paid) {
+      AppToast.success(message: 'Payment successful');
+      AppRouter.route.goNamed(RoutePath.parcelOwnerNavScreen, extra: 1);
+    } else {
+      AppToast.error(
+        message: result == 'cancel'
+            ? 'Payment was cancelled'
+            : 'Payment not completed. Please try again.',
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +247,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         subtitle: Padding(
                           padding: EdgeInsets.only(left: 36.w, top: 4.h),
                           child: Text(
-                            'Pay securely with Stripe',
+                            'Pay securely with card / bank (DPO)',
                             style: context.bodySmall.copyWith(
                               color: AppColors.grayTextSecondaryColor,
                             ),
@@ -303,16 +340,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
 
             // Proceed to Pay Button
-            CustomButton(
-              onTap: () {
-                // TODO: Implement payment integration
-                // For now, just navigate back to home
-                AppRouter.route.goNamed(
-                  RoutePath.parcelOwnerNavScreen,
-                  extra: 1,
-                );
-              },
-              text: AppStrings.proceedToPay.tr,
+            Obx(
+              () => CustomButton(
+                isLoading:
+                    _paymentController.isCreating.value ||
+                    _paymentController.isVerifying.value,
+                onTap: _onProceedToPay,
+                text: AppStrings.proceedToPay.tr,
+              ),
             ),
           ],
         ),

@@ -75,7 +75,8 @@ dependencies:
   firebase_auth: ^6.3.0
   flutter_facebook_auth: ^7.1.6
   firebase_core: ^4.6.0
-  
+  webview_flutter: ^4.10.0
+
 dependency_overrides:
   retrofit: 4.7.2
   

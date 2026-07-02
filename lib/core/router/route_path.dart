@@ -45,6 +45,8 @@ class RoutePath {
   static const String detailsMyParcelScreen = 'detailsMyParcelScreen';
   static const String editParcelScreen = 'editParcelScreen';
   static const String paymentScreen = 'paymentScreen';
+  static const String dpoWebviewScreen = 'dpoWebviewScreen';
   static const String adminApprovalScreen = 'adminApprovalScreen';
   static const String trackParcelOwnerScreen = 'trackParcelOwnerScreen';
+  static const String walletScreen = 'walletScreen';
 }

@@ -71,4 +71,16 @@ class ApiUrls {
   static String chatInitiateP2P() => '$base/v1/chat/initiate-p2p';
   static String acceptParcel({required String id}) =>
       '$base/v1/driver/accept-parcel/$id';
+
+  //============== Payment (DPO) ===================
+  static String dpoCheckout() => '$base/v1/payments/dpo/checkout';
+  static String dpoVerify() => '$base/v1/payments/dpo/verify';
+
+  //============== Wallet ===================
+  static String getWallet() => '$base/v1/wallet/me';
+  static String walletTransactions({required int page}) =>
+      '$base/v1/wallet/transactions?page=$page&limit=10';
+  static String withdraw() => '$base/v1/wallet/withdraw';
+  static String myWithdrawals({required int page}) =>
+      '$base/v1/wallet/withdrawals?page=$page&limit=10';
 }

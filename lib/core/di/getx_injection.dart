@@ -12,6 +12,8 @@ import 'package:delivery_app/features/chat/controller/chat_controller.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/controller/my_parcel_controller.dart';
 import 'package:delivery_app/features/parcel_owner/refund/controller/refund_controller.dart';
 import 'package:delivery_app/features/profile/controller/profile_controller.dart';
+import 'package:delivery_app/features/parcel_owner/payment/controller/payment_controller.dart';
+import 'package:delivery_app/features/driver/wallet/controller/wallet_controller.dart';
 
 void initGetx() {
   //Auth
@@ -43,4 +45,10 @@ void initGetx() {
 
   //Driver Home
   Get.lazyPut(() => DriverHomeController(), fenix: true);
+
+  //Payment
+  Get.lazyPut(() => PaymentController(), fenix: true);
+
+  //Wallet
+  Get.lazyPut(() => WalletController(), fenix: true);
 }
