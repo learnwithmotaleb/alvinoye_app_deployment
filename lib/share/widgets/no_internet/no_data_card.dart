@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class NoDataCard extends StatelessWidget {
@@ -36,7 +37,7 @@ class NoDataCard extends StatelessWidget {
     final effectiveTitle = title ?? "No items found";
     final effectiveSubtitle = subtitle ?? "The list is currently empty";
 
-    return Padding(
+    return Container(
       padding:
           padding ??
           EdgeInsets.symmetric(horizontal: 16, vertical: isList ? 12 : 48),
@@ -70,7 +71,7 @@ class NoDataCard extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
-                  fontSize: isList ? 16 : 20,
+                  fontSize: isList ? 16.sp : 20.sp,
                   color: textColor ?? theme.colorScheme.onSurface,
                 ),
               ),

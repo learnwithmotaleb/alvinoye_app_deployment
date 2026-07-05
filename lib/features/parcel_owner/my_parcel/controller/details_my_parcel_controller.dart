@@ -22,7 +22,7 @@ class DetailsMyParcelController extends GetxController {
   Future<void> singleDetailsMyParcel({required String id}) async {
     try {
       loadingMethod(ApiStatus.loading);
-      final token = await localService.getToken();
+      final token = localService.getToken();
       final response = await apiClient.get(
         url: ApiUrls.createDetailsParcel(id: id),
         token: token,
@@ -59,7 +59,7 @@ class DetailsMyParcelController extends GetxController {
   }) async {
     try {
       loadingRejectAndCounterOfferMethod(true);
-      final token = await localService.getToken();
+      final token = localService.getToken();
       final response = await apiClient.patch(
         url: ApiUrls.rejectAndCounterOffer(id: id),
         token: token,

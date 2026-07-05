@@ -59,7 +59,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     // Get the final price, default to 0 if null
     final price = double.tryParse('${widget.parcel.finalPrice}') ?? 0.0;

@@ -169,7 +169,7 @@ class ApiClient {
           filename: file.file.uri.pathSegments.last,
           contentType: MediaType(split[0], split[1]),
         );
-        
+
         if (formMap.containsKey(file.fieldKey)) {
           if (formMap[file.fieldKey] is List) {
             (formMap[file.fieldKey] as List).add(multipartFile);

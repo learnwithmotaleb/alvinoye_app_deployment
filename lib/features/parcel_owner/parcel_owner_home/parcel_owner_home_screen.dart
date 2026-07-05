@@ -1,19 +1,19 @@
+import 'package:delivery_app/features/parcel_owner/parcel_owner_home/controller/parcel_owner_home_controller.dart';
+import 'package:delivery_app/features/parcel_owner/parcel_owner_home/model/parcel_owner_home_model.dart';
+import 'package:delivery_app/features/parcel_owner/parcel_owner_home/widgets/active_parcel_card.dart';
+import 'package:delivery_app/features/parcel_owner/parcel_owner_home/widgets/parcel_owner_action_buttons.dart';
+import 'package:delivery_app/features/parcel_owner/parcel_owner_home/widgets/parcel_owner_header.dart';
 import 'package:delivery_app/share/widgets/loading/loading_widget.dart';
 import 'package:delivery_app/share/widgets/network_image/custom_network_image.dart';
 import 'package:delivery_app/share/widgets/no_internet/no_data_card.dart';
 import 'package:delivery_app/utils/app_strings/app_strings.dart';
+import 'package:delivery_app/utils/color/app_colors.dart';
+import 'package:delivery_app/utils/extension/base_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:delivery_app/features/parcel_owner/parcel_owner_home/widgets/active_parcel_card.dart';
-import 'package:delivery_app/features/parcel_owner/parcel_owner_home/widgets/parcel_owner_action_buttons.dart';
-import 'package:delivery_app/features/parcel_owner/parcel_owner_home/widgets/parcel_owner_header.dart';
-import 'package:delivery_app/utils/color/app_colors.dart';
-import 'package:delivery_app/utils/extension/base_extension.dart';
 import 'package:get/get.dart';
-import 'package:delivery_app/features/parcel_owner/parcel_owner_home/controller/parcel_owner_home_controller.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:delivery_app/features/parcel_owner/parcel_owner_home/model/parcel_owner_home_model.dart';
 
 class ParcelOwnerHomeScreen extends StatelessWidget {
   ParcelOwnerHomeScreen({super.key});
@@ -59,9 +59,8 @@ class ParcelOwnerHomeScreen extends StatelessWidget {
                       color: AppColors.primaryColor,
                     ),
                   ),
-                  Gap(12.h),
+
                   _buildOngoingParcels(),
-                  Gap(24.h),
 
                   // Recent Delivery Section (Completed Parcels)
                   Text(
@@ -233,7 +232,7 @@ class ParcelOwnerHomeScreen extends StatelessWidget {
     return Obx(() {
       if (controller.isSingleLoading.value) {
         return SizedBox(
-          height: 200.h,
+          height: 1.sh * 0.3,
           child: const Center(child: LoadingWidget()),
         );
       }
@@ -241,7 +240,7 @@ class ParcelOwnerHomeScreen extends StatelessWidget {
       final item = controller.firstParcel.value;
       if (item == null) {
         return SizedBox(
-          height: 200.h,
+          height: 1.sh * 0.3,
           child: Center(
             child: NoDataCard(
               onTap: () => controller.getSingleOngoingData(pageKey: 1),
@@ -251,7 +250,14 @@ class ParcelOwnerHomeScreen extends StatelessWidget {
         );
       }
 
-      return ActiveParcelCard(parcelItem: item);
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Gap(12.h),
+          ActiveParcelCard(parcelItem: item),
+          Gap(24.h),
+        ],
+      );
     });
   }
 }

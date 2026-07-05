@@ -10,8 +10,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import '../../../../core/router/route_path.dart';
+import '../../../../core/router/routes.dart';
+
 class ActionButtonsSection extends StatelessWidget {
   final String? parcelStatus;
+  final String? priceStatus;
   final List<PriceRequest> priceRequests;
   final DetailsMyParcelController controller;
   final ParcelItem parcel;
@@ -24,26 +28,53 @@ class ActionButtonsSection extends StatelessWidget {
     required this.controller,
     required this.parcel,
     required this.onRejectPressed,
+    this.priceStatus,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Don't show buttons if parcel status is PENDING or ONGOING
-    if (parcelStatus?.toUpperCase() == "PENDING" || parcelStatus?.toUpperCase() == "ONGOING") {
+    final isPending = parcelStatus?.toUpperCase() == "PENDING";
+    final isAccepted = priceStatus?.toUpperCase() == "ACCEPTED";
+
+    // 👉 NEW CASE: Show only PAY button
+    if (isPending && isAccepted) {
+      return SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            AppRouter.route.pushNamed(RoutePath.paymentScreen, extra: parcel);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryColor,
+            minimumSize: Size(double.infinity, 48.h),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+          ),
+          child: Text(
+            "Pay",
+            style: context.titleMedium.copyWith(
+              color: AppColors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Existing rule: hide for PENDING or ONGOING (ONLY if not pay case)
+    if (isPending || parcelStatus?.toUpperCase() == "ONGOING") {
       return const SizedBox.shrink();
     }
 
-    // Don't show buttons if price request is REJECTED or COUNTERED
     if (priceRequests.isNotEmpty) {
       final lastRequest = priceRequests.last;
 
-      // Only show buttons for FINAL_OFFER or PROPOSED price types
       if (lastRequest.priceType != "FINAL_OFFER" &&
           lastRequest.priceType != "PROPOSED") {
         return const SizedBox.shrink();
       }
 
-      // Don't show if already rejected
       if (lastRequest.status == "REJECTED") {
         return const SizedBox.shrink();
       }
@@ -53,7 +84,6 @@ class ActionButtonsSection extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    // Get the latest price request (FINAL_OFFER or PROPOSED)
     final currentPriceRequest = priceRequests.last;
 
     return Row(

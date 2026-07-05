@@ -13,7 +13,18 @@ class ParcelImageSection extends StatelessWidget {
     return Container(
       height: 250.h,
       width: double.infinity,
-      color: AppColors.grayTabBgColor,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            spreadRadius: 1,
+            offset: const Offset(0, 4),
+          ),
+        ],
+
+        color: AppColors.grayTabBgColor,
+      ),
       child: CustomNetworkImage(imageUrl: imageUrl ?? "", fit: BoxFit.contain),
     );
   }

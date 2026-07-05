@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/controller/details_my_parcel_controller.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/model/parcel_model.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/widgets/action_buttons_section.dart';
@@ -7,19 +10,18 @@ import 'package:delivery_app/features/parcel_owner/my_parcel/widgets/price_displ
 import 'package:delivery_app/features/parcel_owner/my_parcel/widgets/receiver_details_section.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/widgets/status_message_section.dart';
 import 'package:delivery_app/share/widgets/dialog/custom_dialog.dart';
+import 'package:delivery_app/share/widgets/loading/loading_widget.dart';
+import 'package:delivery_app/share/widgets/no_internet/error_card.dart';
+import 'package:delivery_app/share/widgets/no_internet/no_data_card.dart';
+import 'package:delivery_app/share/widgets/no_internet/no_internet_card.dart';
 import 'package:delivery_app/share/widgets/text_field/custom_text_field.dart';
+import 'package:delivery_app/utils/app_strings/app_strings.dart';
+import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/enum/app_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:delivery_app/core/router/routes.dart';
-import 'package:delivery_app/utils/app_strings/app_strings.dart';
-import 'package:delivery_app/utils/color/app_colors.dart';
-import 'package:delivery_app/share/widgets/loading/loading_widget.dart';
-import 'package:delivery_app/share/widgets/no_internet/error_card.dart';
-import 'package:delivery_app/share/widgets/no_internet/no_data_card.dart';
-import 'package:delivery_app/share/widgets/no_internet/no_internet_card.dart';
 
 class DetailsMyParcelScreen extends StatefulWidget {
   final ParcelItem parcel;
@@ -126,6 +128,14 @@ class _DetailsMyParcelScreenState extends State<DetailsMyParcelScreen> {
                   final priceRequests =
                       controller.detailsMyParcel.value?.data?.priceRequests ??
                       [];
+                  debugPrint("parcelDetails --> ");
+                  debugPrint(
+                    parcelDetails == null
+                        ? 'null'
+                        : const JsonEncoder.withIndent(
+                            '  ',
+                          ).convert(parcelDetails.toJson()),
+                  );
 
                   if (parcelDetails == null) {
                     return SliverFillRemaining(
@@ -146,6 +156,12 @@ class _DetailsMyParcelScreenState extends State<DetailsMyParcelScreen> {
                       ) ??
                       0.0;
                   final hasProposedPrice = proposedPrice > 0;
+
+                  //
+                  final canShowPayButton =
+                      hasProposedPrice &&
+                      parcelDetails.status?.toUpperCase() == "PENDING" &&
+                      parcelDetails.priceStatus?.toUpperCase() == "ACCEPTED";
 
                   return SliverToBoxAdapter(
                     child: Column(
@@ -191,16 +207,20 @@ class _DetailsMyParcelScreenState extends State<DetailsMyParcelScreen> {
                               ),
 
                               if (hasProposedPrice) ...[
-                                Gap(16.h),
+                                if (!canShowPayButton) ...[
+                                  Gap(16.h),
 
-                                // Status Message (REJECTED/COUNTERED)
-                                StatusMessageSection(
-                                  priceRequests: parcelDetails.priceRequests,
-                                ),
+                                  // Status Message (REJECTED/COUNTERED)
+                                  StatusMessageSection(
+                                    priceRequests: parcelDetails.priceRequests,
+                                  ),
+                                ],
+                                Gap(16.h),
 
                                 // Action Buttons (Accept/Reject)
                                 ActionButtonsSection(
                                   parcelStatus: parcelDetails.status,
+                                  priceStatus: parcelDetails.priceStatus,
                                   priceRequests: priceRequests,
                                   controller: controller,
                                   parcel: widget.parcel,
