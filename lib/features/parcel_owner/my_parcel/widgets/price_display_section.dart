@@ -46,7 +46,7 @@ class PriceDisplaySection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       width: double.infinity,
-      height: 45.h,
+      // height: 45.h,
       decoration: BoxDecoration(
         color: AppColors.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8.r),
@@ -54,7 +54,7 @@ class PriceDisplaySection extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            hasFinalPrice ? 'Final Price : ' : '${AppStrings.price.tr} : ',
+            hasFinalPrice ? 'Final Price : ' : '${AppStrings.price.tr} ',
             style: context.bodyMedium.copyWith(
               fontWeight: FontWeight.w700,
               color: AppColors.error,
@@ -88,6 +88,7 @@ class PriceDisplaySection extends StatelessWidget {
                     : 'NOT_SET',
                 style: context.bodySmall.copyWith(
                   fontWeight: FontWeight.w600,
+
                   color: _getStatusColor(
                     priceRequests != null && priceRequests!.isNotEmpty
                         ? priceRequests!.last.priceType

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/controller/my_parcel_controller.dart';
@@ -96,6 +98,7 @@ class _MyParcelScreenState extends State<MyParcelScreen> {
                 child: ParcelCardList(
                   parcel: item,
                   onTap: () {
+                    log("item finalPrice --> ${item.finalPrice}");
                     if (item.status == "PENDING" ||
                         item.status == "WAITING" ||
                         item.status == "ONGOING") {

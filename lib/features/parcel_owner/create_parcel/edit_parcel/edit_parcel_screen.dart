@@ -1,9 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
-import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:delivery_app/helper/validator/text_field_validator.dart';
 import 'package:delivery_app/share/widgets/align/custom_align_text.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
@@ -13,6 +7,12 @@ import 'package:delivery_app/share/widgets/text_field/custom_text_field.dart';
 import 'package:delivery_app/share/widgets/text_field/description_text_field.dart';
 import 'package:delivery_app/utils/app_strings/app_strings.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 
 class EditParcelScreen extends StatefulWidget {
   const EditParcelScreen({super.key});

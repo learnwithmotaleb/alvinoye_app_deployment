@@ -10,6 +10,8 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ParcelController extends GetxController {
+  static ParcelController get to => Get.find<ParcelController>();
+  //
   final ApiClient apiClient = sl<ApiClient>();
   final PagingController<int, DriverParcelItem> ongoingController =
       PagingController(firstPageKey: 1);
@@ -159,6 +161,38 @@ class ParcelController extends GetxController {
       otpLoadingMethod(false);
     } finally {
       otpLoadingMethod(false);
+    }
+  }
+
+  //
+  final RxMap<String, bool> resendOtpLoadingMap = <String, bool>{}.obs;
+
+  bool isResendOtpLoading(String parcelId) =>
+      resendOtpLoadingMap[parcelId] == true;
+
+  Future<void> resendDriverOtp({required String parcelId}) async {
+    try {
+      resendOtpLoadingMap[parcelId] = true;
+
+      final response = await apiClient.post(
+        url: ApiUrls.resendDriverOtp(parcelId: parcelId),
+        body: {},
+      );
+
+      if (response.statusCode == 200) {
+        AppToast.success(
+          message: response.data["message"] ?? "OTP sent successfully",
+        );
+      } else {
+        AppToast.error(
+          message: response.data["message"] ?? "Failed to resend OTP",
+        );
+      }
+    } catch (e) {
+      AppConfig.logger.e(e);
+      AppToast.error(message: e.toString());
+    } finally {
+      resendOtpLoadingMap[parcelId] = false;
     }
   }
 }

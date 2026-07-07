@@ -5,7 +5,6 @@ import 'package:delivery_app/features/parcel_owner/parcel_owner_home/widgets/par
 import 'package:delivery_app/features/parcel_owner/parcel_owner_home/widgets/parcel_owner_header.dart';
 import 'package:delivery_app/share/widgets/loading/loading_widget.dart';
 import 'package:delivery_app/share/widgets/network_image/custom_network_image.dart';
-import 'package:delivery_app/share/widgets/no_internet/no_data_card.dart';
 import 'package:delivery_app/utils/app_strings/app_strings.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
@@ -14,6 +13,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+import '../../../share/widgets/no_internet/no_data_card.dart';
 
 class ParcelOwnerHomeScreen extends StatelessWidget {
   ParcelOwnerHomeScreen({super.key});
@@ -34,6 +35,7 @@ class ParcelOwnerHomeScreen extends StatelessWidget {
               child: Obx(() {
                 final profileData =
                     controller.profileController.profile.value.data;
+
                 return ParcelOwnerHeader(
                   name: profileData?.fullName ?? "Guest",
                   imageUrl: profileData?.profilePicture ?? "",
@@ -123,7 +125,7 @@ class ParcelOwnerHomeScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(4.r),
                                     ),
                                     child: Text(
-                                      "Completed Parcel",
+                                      "Completed",
                                       style: context.labelMedium.copyWith(
                                         color: Colors.white,
                                       ),
@@ -239,10 +241,12 @@ class ParcelOwnerHomeScreen extends StatelessWidget {
 
       final item = controller.firstParcel.value;
       if (item == null) {
-        return SizedBox(
-          height: 1.sh * 0.3,
+        return Container(
+          // color: Colors.amber,
+          // height: 1.sh * 0.3,
           child: Center(
             child: NoDataCard(
+              vertical: 12,
               onTap: () => controller.getSingleOngoingData(pageKey: 1),
               title: "No active parcels",
             ),

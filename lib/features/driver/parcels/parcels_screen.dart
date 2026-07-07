@@ -1,8 +1,8 @@
+import 'package:delivery_app/features/driver/parcels/widgets/parcel_list.dart';
+import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_utils/src/extensions/context_extensions.dart';
-import 'package:delivery_app/features/driver/parcels/widgets/parcel_list.dart';
-import 'package:delivery_app/utils/color/app_colors.dart';
 
 class ParcelsScreen extends StatefulWidget {
   const ParcelsScreen({super.key});

@@ -1,12 +1,14 @@
-import 'package:delivery_app/features/driver/parcels/model/parcel_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
+import 'package:delivery_app/features/driver/parcels/controller/parcel_controller.dart';
+import 'package:delivery_app/features/driver/parcels/model/parcel_model.dart';
 import 'package:delivery_app/share/widgets/network_image/custom_network_image.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 class ParcelCard extends StatelessWidget {
   final DriverParcelItem parcelItem;
@@ -65,6 +67,7 @@ class ParcelCard extends StatelessWidget {
               bottom: 12.r,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 GestureDetector(
                   onTap: onTap,
@@ -99,12 +102,22 @@ class ParcelCard extends StatelessWidget {
                 ),
                 Gap(12.h),
                 // Actions
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: _buildActionButtons(context),
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: _buildFirstRowButtons(context),
+                      ),
+                    ),
+                    Gap(8.h),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(children: _buildSecondRowButtons(context)),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -175,7 +188,81 @@ class ParcelCard extends StatelessWidget {
     );
   }
 
+  List<Widget> _buildFirstRowButtons(BuildContext context) {
+    final buttons = <Widget>[
+      _ActionButton(
+        label: isLoadingChat ? "Loading..." : "Chat",
+        icon: isLoadingChat ? Icons.hourglass_empty : Icons.chat_bubble_outline,
+        isOutlined: true,
+        color: AppColors.primaryColor,
+        onTap: isLoadingChat ? () {} : onChatTap,
+      ),
+    ];
+
+    if (status == "Ongoing") {
+      buttons.addAll([
+        Gap(8.w),
+        _ActionButton(
+          label: "Track Live",
+          icon: Icons.location_on,
+          isOutlined: true,
+          color: Colors.red,
+          onTap: () {
+            AppRouter.route.pushNamed(
+              RoutePath.trackParcelScreen,
+              extra: parcelItem,
+            );
+          },
+        ),
+        Gap(8.w),
+        _ActionButton(
+          label: "Confirm",
+          icon: Icons.check_circle_outline,
+          isOutlined: true,
+          color: Colors.green,
+          onTap: () {
+            AppRouter.route.pushNamed(
+              RoutePath.parcelOtpScreen,
+              extra: parcelMainId,
+            );
+          },
+        ),
+      ]);
+    }
+
+    return buttons;
+  }
+
+  List<Widget> _buildSecondRowButtons(BuildContext context) {
+    if (status != "Ongoing") return [];
+
+    final controller = ParcelController.to;
+
+    return [
+      Obx(
+        () => _ActionButton(
+          label: controller.isResendOtpLoading(parcelMainId)
+              ? "Sending..."
+              : "Resend OTP",
+
+          icon: controller.isResendOtpLoading(parcelMainId)
+              ? Icons.hourglass_empty
+              : Icons.refresh,
+
+          isOutlined: true,
+
+          color: Colors.orange,
+
+          onTap: controller.isResendOtpLoading(parcelMainId)
+              ? () {}
+              : () => controller.resendDriverOtp(parcelId: parcelMainId),
+        ),
+      ),
+    ];
+  }
+
   List<Widget> _buildActionButtons(BuildContext context) {
+    final controller = ParcelController.to;
     List<Widget> buttons = [];
 
     // Chat button - available for both statuses
@@ -206,6 +293,28 @@ class ParcelCard extends StatelessWidget {
           },
         ),
       );
+      buttons.add(Gap(8.w));
+      buttons.add(
+        Obx(
+          () => _ActionButton(
+            label: controller.isResendOtpLoading(parcelMainId)
+                ? "Sending..."
+                : "Resend OTP",
+            icon: controller.isResendOtpLoading(parcelMainId)
+                ? Icons.hourglass_empty
+                : Icons.refresh,
+            isOutlined: true,
+            color: Colors.orange,
+            onTap: controller.isResendOtpLoading(parcelMainId)
+                ? () {}
+                : () {
+                    controller.resendDriverOtp(parcelId: parcelMainId);
+                  },
+          ),
+        ),
+      );
+
+      buttons.add(Gap(8.w));
       buttons.add(Gap(8.w));
       buttons.add(
         _ActionButton(
@@ -265,6 +374,7 @@ class _ActionButton extends StatelessWidget {
             Text(
               label,
               style: context.bodyMedium.copyWith(
+                fontSize: 16.sp,
                 color: isOutlined ? color : Colors.white,
                 fontWeight: FontWeight.w500,
               ),

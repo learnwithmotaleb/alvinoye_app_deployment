@@ -8,7 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class ReceiverDetailsSection extends StatelessWidget {
-  final Data parcelDetails;
+  final ParcelDetailsModelData parcelDetails;
 
   const ReceiverDetailsSection({super.key, required this.parcelDetails});
 

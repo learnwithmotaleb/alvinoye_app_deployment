@@ -1,7 +1,7 @@
 class ParcelDetailsModel {
   final bool? success;
   final String? message;
-  final Data? data;
+  final ParcelDetailsDataParcelOwner? data;
 
   ParcelDetailsModel({this.success, this.message, this.data});
 
@@ -9,7 +9,9 @@ class ParcelDetailsModel {
       ParcelDetailsModel(
         success: json["success"],
         message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null
+            ? null
+            : ParcelDetailsDataParcelOwner.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -19,7 +21,7 @@ class ParcelDetailsModel {
   };
 }
 
-class Data {
+class ParcelDetailsDataParcelOwner {
   final String? id;
   final String? parcelId;
   final UserId? userId;
@@ -51,7 +53,7 @@ class Data {
   final String? senderRemarks;
   final String? dataId;
 
-  Data({
+  ParcelDetailsDataParcelOwner({
     this.id,
     this.parcelId,
     this.userId,
@@ -84,50 +86,53 @@ class Data {
     this.dataId,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["_id"],
-    parcelId: json["parcel_id"],
-    userId: json["user_id"] == null ? null : UserId.fromJson(json["user_id"]),
-    parcelName: json["parcel_name"],
-    size: json["size"],
-    vehicleType: json["vehicle_type"],
-    weight: json["weight"]?.toDouble(),
-    pickupLocation: json["pickup_location"] == null
-        ? null
-        : Location.fromJson(json["pickup_location"]),
-    handoverLocation: json["handover_location"] == null
-        ? null
-        : Location.fromJson(json["handover_location"]),
-    priority: json["priority"],
-    date: json["date"] == null ? null : DateTime.parse(json["date"]),
-    time: json["time"],
-    parcelImages: json["parcel_images"] == null
-        ? []
-        : List<String>.from(json["parcel_images"]!.map((x) => x)),
-    receiverName: json["receiver_name"],
-    receiverPhone: json["receiver_phone"],
-    status: json["status"],
-    finalPrice: json["final_price"],
-    priceStatus: json["price_status"],
-    rejectionReason: json["rejection_reason"],
-    acceptedBy: json["accepted_by"],
-    acceptedAt: json["accepted_at"],
-    completedAt: json["completed_at"],
-    stripeCheckoutSessionId: json["stripe_checkout_session_id"],
-    createdAt: json["createdAt"] == null
-        ? null
-        : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null
-        ? null
-        : DateTime.parse(json["updatedAt"]),
-    v: json["__v"],
-    priceRequests: json["price_requests"] == null
-        ? []
-        : List<dynamic>.from(json["price_requests"]!.map((x) => x)),
-    review: json["review"],
-    senderRemarks: json["sender_remarks"],
-    dataId: json["id"],
-  );
+  factory ParcelDetailsDataParcelOwner.fromJson(Map<String, dynamic> json) =>
+      ParcelDetailsDataParcelOwner(
+        id: json["_id"],
+        parcelId: json["parcel_id"],
+        userId: json["user_id"] == null
+            ? null
+            : UserId.fromJson(json["user_id"]),
+        parcelName: json["parcel_name"],
+        size: json["size"],
+        vehicleType: json["vehicle_type"],
+        weight: json["weight"]?.toDouble(),
+        pickupLocation: json["pickup_location"] == null
+            ? null
+            : Location.fromJson(json["pickup_location"]),
+        handoverLocation: json["handover_location"] == null
+            ? null
+            : Location.fromJson(json["handover_location"]),
+        priority: json["priority"],
+        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        time: json["time"],
+        parcelImages: json["parcel_images"] == null
+            ? []
+            : List<String>.from(json["parcel_images"]!.map((x) => x)),
+        receiverName: json["receiver_name"],
+        receiverPhone: json["receiver_phone"],
+        status: json["status"],
+        finalPrice: json["final_price"],
+        priceStatus: json["price_status"],
+        rejectionReason: json["rejection_reason"],
+        acceptedBy: json["accepted_by"],
+        acceptedAt: json["accepted_at"],
+        completedAt: json["completed_at"],
+        stripeCheckoutSessionId: json["stripe_checkout_session_id"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+        v: json["__v"],
+        priceRequests: json["price_requests"] == null
+            ? []
+            : List<dynamic>.from(json["price_requests"]!.map((x) => x)),
+        review: json["review"],
+        senderRemarks: json["sender_remarks"],
+        dataId: json["id"],
+      );
 
   Map<String, dynamic> toJson() => {
     "_id": id,

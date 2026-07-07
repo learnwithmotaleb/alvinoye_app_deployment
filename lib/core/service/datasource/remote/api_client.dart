@@ -1,11 +1,14 @@
 import 'dart:io';
+
+import 'package:delivery_app/core/router/route_path.dart';
+import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/core/service/datasource/local/local_service.dart';
 import 'package:delivery_app/utils/multipart/multipart_body.dart';
 import 'package:dio/dio.dart';
-import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:delivery_app/core/router/route_path.dart';
-import 'package:delivery_app/core/router/routes.dart';
+import 'package:mime/mime.dart';
+
+import '../../../../utils/config/app_config.dart';
 import 'network_checker.dart';
 
 class ApiClient {
@@ -24,7 +27,7 @@ class ApiClient {
     bool isJson = true,
   }) async {
     final headers = <String, String>{};
-    final authToken = token ?? await localService.getToken();
+    final authToken = token ?? localService.getToken();
 
     if (authToken.isNotEmpty) headers['Authorization'] = 'Bearer $authToken';
     if (isJson) headers['Content-Type'] = 'application/json';
@@ -42,6 +45,8 @@ class ApiClient {
     if (!await _hasConnection()) {
       return _buildErrorResponse('No internet connection');
     }
+
+    AppConfig.logger.i("url --> $url");
 
     try {
       final headers = await _headers(token: token);
@@ -64,7 +69,7 @@ class ApiClient {
     if (!await _hasConnection()) {
       return _buildErrorResponse('No internet connection');
     }
-
+    AppConfig.logger.i("url --> $url");
     try {
       final headers = await _headers(token: token);
       final response = await dio.post(
@@ -86,7 +91,7 @@ class ApiClient {
     if (!await _hasConnection()) {
       return _buildErrorResponse('No internet connection');
     }
-
+    AppConfig.logger.i("url --> $url");
     try {
       final headers = await _headers(token: token);
       final response = await dio.put(
@@ -108,7 +113,7 @@ class ApiClient {
     if (!await _hasConnection()) {
       return _buildErrorResponse('No internet connection');
     }
-
+    AppConfig.logger.i("url --> $url");
     try {
       final headers = await _headers(token: token);
       final response = await dio.patch(
@@ -130,7 +135,7 @@ class ApiClient {
     if (!await _hasConnection()) {
       return _buildErrorResponse('No internet connection');
     }
-
+    AppConfig.logger.i("url --> $url");
     try {
       final headers = await _headers(token: token, isJson: false);
       final response = await dio.delete(
@@ -154,6 +159,7 @@ class ApiClient {
     if (!await _hasConnection()) {
       return _buildErrorResponse('No internet connection');
     }
+    AppConfig.logger.i("url --> $url");
 
     try {
       final headers = await _headers(token: token, isJson: false);
@@ -210,10 +216,10 @@ class ApiClient {
       final data = error.response?.data ?? {};
 
       if (statusCode == 401) {
-          try {
-            await localService.logOut();
-            AppRouter.route.goNamed(RoutePath.loginScreen);
-          } catch (_) {}
+        try {
+          await localService.logOut();
+          AppRouter.route.goNamed(RoutePath.loginScreen);
+        } catch (_) {}
         return Response(
           requestOptions: requestOptions,
           statusCode: 401,

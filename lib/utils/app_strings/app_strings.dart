@@ -99,8 +99,10 @@ class AppStrings {
   static const String date = "date";
   static const String time = "time";
   static const String pickupLocation = "pickup_location";
+  static const String senderName = "sender_name";
   static const String receiverName = "receiver_name";
   static const String receiverPhone = "receiver_phone";
+  static const String senderPhone = "sender_phone";
   static const String senderRemarks = "sender_remarks";
   static const String confirm = "confirm";
   static const String transactionComplete = "transaction_Complete";

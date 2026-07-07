@@ -1,7 +1,6 @@
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/features/driver/parcel_details/controller/parcel_details_controller.dart';
-
 import 'package:delivery_app/helper/date_converter/date_converter.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
 import 'package:delivery_app/share/widgets/loading/loading_widget.dart';
@@ -235,13 +234,13 @@ class _ParcelDetailsScreenState extends State<ParcelDetailsScreen> {
                                 Gap(8.h),
                                 _buildDetailRow(
                                   context,
-                                  label: AppStrings.receiverName.tr,
+                                  label: AppStrings.senderName.tr,
                                   value: data.userId?.fullName ?? "N/A",
                                 ),
                                 Gap(8.h),
                                 _buildDetailRow(
                                   context,
-                                  label: AppStrings.receiverPhone.tr,
+                                  label: AppStrings.senderPhone.tr,
                                   value: data.userId?.phoneNumber ?? "N/A",
                                 ),
                                 Gap(16.h),

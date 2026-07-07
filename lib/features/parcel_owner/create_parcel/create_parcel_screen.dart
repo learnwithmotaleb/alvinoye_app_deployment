@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:delivery_app/features/driver/commuter_registration/models/record_location.dart';
@@ -15,6 +16,7 @@ import 'package:delivery_app/utils/app_strings/app_strings.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -22,9 +24,12 @@ import 'package:iconsax/iconsax.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 
 import '../../../utils/config/app_config.dart';
+import 'create_details_parcel/model/parcel_details_model.dart';
 
 class CreateParcelScreen extends StatefulWidget {
-  const CreateParcelScreen({super.key});
+  final ParcelDetailsDataParcelOwner? parcel;
+
+  const CreateParcelScreen({super.key, this.parcel});
 
   @override
   State<CreateParcelScreen> createState() => _CreateParcelScreenState();
@@ -60,6 +65,60 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
   final ValueNotifier<String?> _selectedPriority = ValueNotifier(null);
   final ValueNotifier<String?> _selectedVehicleType = ValueNotifier(null);
   final List<String> _vehicleTypes = ['Car', 'Bike', 'Truck', 'Van'];
+
+  bool get isEditMode => widget.parcel != null;
+
+  @override
+  void initState() {
+    super.initState();
+
+    debugPrint("widget.parcel: ${widget.parcel}");
+
+    if (isEditMode) {
+      final parcel = widget.parcel!;
+
+      _nameController.text = parcel.parcelName ?? "";
+      _weightController.text = parcel.weight?.toString() ?? "";
+
+      _receiverNameController.text = parcel.receiverName ?? "";
+      _receiverPhoneController.text = parcel.receiverPhone ?? "";
+      _senderRemarksController.text = parcel.senderRemarks ?? "";
+
+      _dateController.text = parcel.date != null
+          ? DateConverter.formatDate(
+              dateTime: parcel.date!,
+              format: 'yyyy-MM-dd',
+            )
+          : "";
+
+      _timeController.text = parcel.time ?? "";
+
+      _selectedSize.value = parcel.size;
+      _selectedPriority.value = parcel.priority;
+      _selectedVehicleType.value = parcel.vehicleType;
+
+      if (parcel.pickupLocation != null) {
+        selectedPickupLocation.value = RecordLocation(
+          LatLng(
+            parcel.pickupLocation!.latitude ?? 0,
+            parcel.pickupLocation!.longitude ?? 0,
+          ),
+          parcel.pickupLocation!.address ?? "",
+        );
+      }
+
+      if (parcel.handoverLocation != null) {
+        selectedHandoverLocation.value = RecordLocation(
+          LatLng(
+            parcel.handoverLocation!.latitude ?? 0,
+            parcel.handoverLocation!.longitude ?? 0,
+          ),
+          parcel.handoverLocation!.address ?? "",
+        );
+      }
+    }
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -87,7 +146,7 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "Create Parcel",
+          isEditMode ? "Edit Parcel" : "Create Parcel",
           style: context.titleMedium.copyWith(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -304,8 +363,11 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
               CustomTextField(
                 controller: _receiverPhoneController,
                 hintText: "Enter receiver phone",
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.numberWithOptions(signed: true),
                 fillColor: Colors.white,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
+                ],
                 validator: TextFieldValidator.phone(),
               ),
               Gap(12.h),
@@ -333,14 +395,18 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
                 () => CustomButton(
                   isLoading: createParcelController.createParcelLoading.value,
                   onTap: () {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+
                     final body = {
                       "data": jsonEncode({
                         "parcel_name": _nameController.text,
                         "size": _selectedSize.value ?? "",
                         "vehicle_type": _selectedVehicleType.value ?? "",
-                        "weight": _weightController.text.isNotEmpty
-                            ? double.parse(_weightController.text)
-                            : 0.0,
+                        "weight":
+                            double.tryParse(_weightController.text) ?? 0.0,
+
                         "pickup_location": {
                           "address": selectedPickupLocation.value.address,
                           "latitude":
@@ -348,6 +414,7 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
                           "longitude":
                               selectedPickupLocation.value.latLng.longitude,
                         },
+
                         "handover_location": {
                           "address": selectedHandoverLocation.value.address,
                           "latitude":
@@ -355,6 +422,7 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
                           "longitude":
                               selectedHandoverLocation.value.latLng.longitude,
                         },
+
                         "priority": _selectedPriority.value ?? "",
                         "date": _dateController.text,
                         "time": _timeController.text,
@@ -364,7 +432,12 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
                       }),
                     };
 
-                    if (_formKey.currentState!.validate()) {
+                    if (isEditMode) {
+                      createParcelController.updateParcel(
+                        parcelId: widget.parcel!.id!,
+                        body: body,
+                      );
+                    } else {
                       createParcelController.createParcel(body: body);
                     }
                   },

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/features/parcel_owner/my_parcel/controller/details_my_parcel_controller.dart';
@@ -18,6 +19,7 @@ import 'package:delivery_app/share/widgets/text_field/custom_text_field.dart';
 import 'package:delivery_app/utils/app_strings/app_strings.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/enum/app_enum.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -58,6 +60,9 @@ class _DetailsMyParcelScreenState extends State<DetailsMyParcelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log(
+      "price of parcel in detailsMyParcelScreen : ${widget.parcel.finalPrice}",
+    );
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
@@ -147,6 +152,7 @@ class _DetailsMyParcelScreenState extends State<DetailsMyParcelScreen> {
                   final finalPrice = parcelDetails.finalPrice != null
                       ? double.tryParse('${parcelDetails.finalPrice}') ?? 0.0
                       : 0.0;
+
                   final hasFinalPrice = finalPrice > 0;
 
                   // Get proposed price for status display
@@ -162,6 +168,9 @@ class _DetailsMyParcelScreenState extends State<DetailsMyParcelScreen> {
                       hasProposedPrice &&
                       parcelDetails.status?.toUpperCase() == "PENDING" &&
                       parcelDetails.priceStatus?.toUpperCase() == "ACCEPTED";
+
+                  //
+                  log("proposedPrice of detail model parsed : $proposedPrice");
 
                   return SliverToBoxAdapter(
                     child: Column(
@@ -218,12 +227,16 @@ class _DetailsMyParcelScreenState extends State<DetailsMyParcelScreen> {
                                 Gap(16.h),
 
                                 // Action Buttons (Accept/Reject)
+                                if (kDebugMode)
+                                  Text(
+                                    "widget.parcel in aboutbuttonsection: $proposedPrice",
+                                  ),
                                 ActionButtonsSection(
                                   parcelStatus: parcelDetails.status,
                                   priceStatus: parcelDetails.priceStatus,
                                   priceRequests: priceRequests,
                                   controller: controller,
-                                  parcel: widget.parcel,
+                                  parcelDetails: parcelDetails,
                                   onRejectPressed: () {
                                     _showRejectDialog(context, priceRequests);
                                   },

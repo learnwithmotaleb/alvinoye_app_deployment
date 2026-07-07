@@ -1,12 +1,12 @@
 import 'package:delivery_app/features/driver/parcel_details/controller/parcel_details_controller.dart';
 import 'package:delivery_app/features/driver/parcels/controller/parcel_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
 import 'package:delivery_app/share/widgets/text_field/otp_text_field.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class ParcelOtpScreen extends StatefulWidget {
@@ -48,7 +48,7 @@ class _ParcelOtpScreenState extends State<ParcelOtpScreen> {
               children: [
                 Gap(40.h),
                 Text(
-                  "Receber accept parcel",
+                  "Reciever accept parcel",
                   style: context.bodyLarge.copyWith(
                     color: AppColors.grayTextSecondaryColor,
                   ),

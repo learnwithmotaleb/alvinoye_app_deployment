@@ -104,13 +104,43 @@ class TextFieldValidator {
     };
   }
 
+  // static String? Function(String?) phone() {
+  //   return (value) {
+  //     final trimmed = value?.trim() ?? '';
+  //     if (trimmed.isEmpty) return "Phone number is required";
+
+  //     final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
+  //     if (!phoneRegex.hasMatch(trimmed)) return "Enter a valid phone number";
+
+  //     return null;
+  //   };
+  // }
+
   static String? Function(String?) phone() {
     return (value) {
-      final trimmed = value?.trim() ?? '';
-      if (trimmed.isEmpty) return "Phone number is required";
+      if (value == null || value.trim().isEmpty) {
+        return "Phone number is required";
+      }
 
-      final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
-      if (!phoneRegex.hasMatch(trimmed)) return "Enter a valid phone number";
+      final phone = value.trim();
+
+      // Country code required
+      if (!phone.startsWith("+")) {
+        return "Phone number must include country code (example: +880XXXXXXXXXX)";
+      }
+
+      // Remove + and validate remaining digits
+      final digits = phone.substring(1);
+
+      if (!RegExp(r'^[0-9]+$').hasMatch(digits)) {
+        return "Invalid phone number format";
+      }
+
+      // International phone length check
+      // E.164 allows max 15 digits and minimum around 7 digits
+      if (digits.length < 7 || digits.length > 15) {
+        return "Enter a valid phone number";
+      }
 
       return null;
     };

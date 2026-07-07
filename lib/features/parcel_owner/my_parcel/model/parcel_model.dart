@@ -65,6 +65,7 @@ class ParcelItem {
   final AcceptedBy? acceptedBy;
   final DateTime? acceptedAt;
   final dynamic completedAt;
+  final bool isPaid;
   final dynamic stripeCheckoutSessionId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -98,6 +99,7 @@ class ParcelItem {
     this.createdAt,
     this.updatedAt,
     this.datumId,
+    required this.isPaid,
   });
 
   factory ParcelItem.fromJson(Map<String, dynamic> json) => ParcelItem(
@@ -144,6 +146,7 @@ class ParcelItem {
         ? null
         : DateTime.parse(json["updatedAt"]),
     datumId: json["id"],
+    isPaid: json["is_paid"] ?? false,
   );
 
   Map<String, dynamic> toJson() => {

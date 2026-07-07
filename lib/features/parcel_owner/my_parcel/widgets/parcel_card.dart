@@ -52,7 +52,13 @@ class ParcelCardList extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [_buildStatusBadge()],
+              children: [
+                if (parcel.status == "PENDING") ...[
+                  _buildPaymentBadge(),
+                  SizedBox(width: 8.w),
+                ],
+                _buildStatusBadge(),
+              ],
             ),
             Gap(12.h),
             Padding(
@@ -131,6 +137,29 @@ class ParcelCardList extends StatelessWidget {
     );
   }
 
+  Widget _buildPaymentBadge() {
+    final bool paid = parcel.isPaid;
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: paid ? AppColors.success : AppColors.redColor,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(8.r),
+          bottomRight: Radius.circular(8.r),
+        ),
+      ),
+      child: Text(
+        paid ? "Paid" : "Unpaid",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
   Widget _buildStatusBadge() {
     Color badgeColor = Colors.grey;
     String statusText = '';
@@ -141,10 +170,10 @@ class ParcelCardList extends StatelessWidget {
       statusText = 'Pending';
     } else if (status == "ONGOING") {
       badgeColor = AppColors.orangeSecondaryAccentColorNormal;
-      statusText = 'Ongoing Parcel';
+      statusText = 'Ongoing';
     } else if (status == "COMPLETED") {
       badgeColor = AppColors.success;
-      statusText = 'Completed Parcel';
+      statusText = 'Completed';
     } else if (status == "REJECTED") {
       badgeColor = AppColors.redColor;
       statusText = 'Reject';

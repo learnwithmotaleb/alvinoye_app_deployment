@@ -47,6 +47,9 @@ import 'package:delivery_app/utils/extension/base_extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/parcel_owner/create_parcel/create_details_parcel/model/parcel_details_model.dart';
+import '../../features/parcel_owner/my_parcel/model/details_my_parcel_model.dart';
+
 class AppRouter {
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
@@ -440,8 +443,10 @@ class AppRouter {
         name: RoutePath.createParcelScreen,
         path: RoutePath.createParcelScreen.addBasePath,
         pageBuilder: (context, state) {
+          final parcel = state.extra as ParcelDetailsDataParcelOwner?;
+
           return _buildPageWithAnimation(
-            child: CreateParcelScreen(),
+            child: CreateParcelScreen(parcel: parcel),
             state: state,
           );
         },
@@ -541,9 +546,9 @@ class AppRouter {
         name: RoutePath.paymentScreen,
         path: RoutePath.paymentScreen.addBasePath,
         pageBuilder: (context, state) {
-          final parcel = state.extra as ParcelItem;
+          final parcel = state.extra as ParcelDetailsModelData;
           return _buildPageWithAnimation(
-            child: PaymentScreen(parcel: parcel),
+            child: PaymentScreen(parcelDetails: parcel),
             state: state,
           );
         },

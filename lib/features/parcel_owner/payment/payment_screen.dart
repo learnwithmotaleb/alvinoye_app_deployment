@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
-import 'package:delivery_app/features/parcel_owner/my_parcel/model/parcel_model.dart';
 import 'package:delivery_app/features/parcel_owner/payment/controller/payment_controller.dart';
 import 'package:delivery_app/helper/toast/toast_helper.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
@@ -13,9 +14,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import '../my_parcel/model/details_my_parcel_model.dart';
+
 class PaymentScreen extends StatefulWidget {
-  final ParcelItem parcel;
-  const PaymentScreen({super.key, required this.parcel});
+  final ParcelDetailsModelData parcelDetails;
+  const PaymentScreen({super.key, required this.parcelDetails});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -26,7 +29,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   final PaymentController _paymentController = Get.put(PaymentController());
 
   Future<void> _onProceedToPay() async {
-    final parcelId = widget.parcel.id;
+    final parcelId = widget.parcelDetails.id;
     if (parcelId == null || parcelId.isEmpty) {
       AppToast.error(message: 'Invalid parcel');
       return;
@@ -62,7 +65,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     // Get the final price, default to 0 if null
-    final price = double.tryParse('${widget.parcel.finalPrice}') ?? 0.0;
+
+    // Get proposed price for status display
+    final proposedPrice =
+        double.tryParse(
+          '${(widget.parcelDetails.priceRequests != null && widget.parcelDetails.priceRequests!.isNotEmpty) ? widget.parcelDetails.priceRequests!.last.proposedPrice : 0}',
+        ) ??
+        0.0;
+
+    log("parcel price in details page: in button section: $proposedPrice");
+
+    log(" price: $proposedPrice");
+    log("final_price: ${widget.parcelDetails.finalPrice}");
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -107,11 +121,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               height: 80.h,
                               width: 80.w,
                               child:
-                                  widget.parcel.parcelImages != null &&
-                                      widget.parcel.parcelImages!.isNotEmpty
+                                  widget.parcelDetails.parcelImages != null &&
+                                      widget
+                                          .parcelDetails
+                                          .parcelImages!
+                                          .isNotEmpty
                                   ? CustomNetworkImage(
-                                      imageUrl:
-                                          widget.parcel.parcelImages!.first,
+                                      imageUrl: widget
+                                          .parcelDetails
+                                          .parcelImages!
+                                          .first,
                                       fit: BoxFit.cover,
                                     )
                                   : Container(
@@ -132,17 +151,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               children: [
                                 _buildInfoRow(
                                   AppStrings.parcelId.tr,
-                                  widget.parcel.parcelId ?? 'N/A',
+                                  widget.parcelDetails.parcelId ?? 'N/A',
                                 ),
                                 Gap(4.h),
                                 _buildInfoRow(
                                   AppStrings.parcelName.tr,
-                                  widget.parcel.parcelName ?? 'N/A',
+                                  widget.parcelDetails.parcelName ?? 'N/A',
                                 ),
                                 Gap(4.h),
                                 _buildInfoRow(
                                   'Delivery Address',
-                                  widget.parcel.handoverLocation?.address ??
+                                  widget
+                                          .parcelDetails
+                                          .handoverLocation
+                                          ?.address ??
                                       'N/A',
                                 ),
                               ],
@@ -181,7 +203,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           ),
                           Gap(8.h),
                           Text(
-                            '\$${price.toStringAsFixed(2)}',
+                            '\$${proposedPrice.toStringAsFixed(2)}',
                             style: context.headlineLarge.copyWith(
                               fontWeight: FontWeight.w700,
                               color: AppColors.primaryColor,
@@ -362,7 +384,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
       text: TextSpan(
         children: [
           TextSpan(
-            text: '$label: ',
+            text:
+                '${label.endsWith(":") ? label.substring(0, label.length - 1) : label}: ',
             style: context.bodySmall.copyWith(
               fontWeight: FontWeight.w700,
               color: AppColors.primaryColor,

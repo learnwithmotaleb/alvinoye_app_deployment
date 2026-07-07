@@ -269,8 +269,12 @@ class _CreateDetailsParcelScreenState extends State<CreateDetailsParcelScreen> {
                           if (!isWaiting) ...[
                             OutlinedButton(
                               onPressed: () {
+                                debugPrint(
+                                  "data in create details parcel screen: $data",
+                                );
                                 AppRouter.route.pushNamed(
-                                  RoutePath.editParcelScreen,
+                                  RoutePath.createParcelScreen,
+                                  extra: data,
                                 );
                               },
                               style: OutlinedButton.styleFrom(

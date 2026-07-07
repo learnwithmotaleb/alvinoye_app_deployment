@@ -16,6 +16,7 @@ class NoDataCard extends StatelessWidget {
     this.textColor,
     this.padding,
     this.iconSize = 64,
+    this.vertical,
   });
 
   final VoidCallback onTap;
@@ -29,6 +30,7 @@ class NoDataCard extends StatelessWidget {
   final Color? textColor;
   final EdgeInsetsGeometry? padding;
   final double iconSize;
+  final double? vertical;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,10 @@ class NoDataCard extends StatelessWidget {
     return Container(
       padding:
           padding ??
-          EdgeInsets.symmetric(horizontal: 16, vertical: isList ? 12 : 48),
+          EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: vertical ?? (isList ? 12 : 48),
+          ),
       child: Center(
         child: SingleChildScrollView(
           child: Column(

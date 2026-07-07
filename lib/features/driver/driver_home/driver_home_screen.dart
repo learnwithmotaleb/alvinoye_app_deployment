@@ -5,6 +5,8 @@ import 'package:delivery_app/features/driver/driver_home/model/driver_home_model
 import 'package:delivery_app/features/driver/driver_home/widgets/driver_header.dart';
 import 'package:delivery_app/features/driver/driver_home/widgets/driver_request_card.dart';
 import 'package:delivery_app/features/driver/driver_home/widgets/stat_card.dart';
+import 'package:delivery_app/features/driver/parcels/model/parcel_model.dart'
+    as driver_parcel;
 import 'package:delivery_app/features/parcel_owner/my_parcel/controller/my_parcel_controller.dart';
 import 'package:delivery_app/features/profile/controller/profile_controller.dart';
 import 'package:delivery_app/share/widgets/loading/loading_widget.dart';
@@ -18,7 +20,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:delivery_app/features/driver/parcels/model/parcel_model.dart' as driver_parcel;
 
 class DriverHomeScreen extends StatefulWidget {
   const DriverHomeScreen({super.key});
@@ -106,7 +107,6 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               ),
             ),
 
-          
             // ── REST paginated list (fallback / scroll) ────────────────
             PagedSliverList<int, ParcelInformation>(
               pagingController: controller.pagingController,
@@ -119,82 +119,97 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                       right: 16.w,
                     ),
                     child: Obx(
-                      () => DriverRequestCard(
-                        parcelId: item.parcelId ?? "N/A",
-                        parcelName: item.parcelName ?? "N/A",
-                        size: item.size ?? "N/A",
-                        price: "\$${item.finalPrice ?? 0}",
-                        imageUrl:
-                            (item.parcelImages != null &&
-                                item.parcelImages!.isNotEmpty)
-                            ? item.parcelImages!.first
-                            : "",
-                        isLoading:
-                            controller.acceptLoadingMap[item.id ?? ''] == true,
-                        onImageTap: () {
+                      () => GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
                           AppRouter.route.pushNamed(
                             RoutePath.parcelDetailsScreen,
                             extra: item,
                           );
                         },
-                        onTrackTap: () {
-                          final driverParcelItem =
-                              driver_parcel.DriverParcelItem(
-                            id: item.id,
-                            parcelId: item.parcelId,
-                            parcelName: item.parcelName,
-                            size: item.size,
-                            vehicleType: item.vehicleType,
-                            weight: item.weight?.toDouble(),
-                            pickupLocation: item.pickupLocation != null
-                                ? driver_parcel.Location(
-                                    address: item.pickupLocation!.address,
-                                    latitude: item.pickupLocation!.latitude,
-                                    longitude: item.pickupLocation!.longitude,
-                                  )
-                                : null,
-                            handoverLocation: item.handoverLocation != null
-                                ? driver_parcel.Location(
-                                    address: item.handoverLocation!.address,
-                                    latitude: item.handoverLocation!.latitude,
-                                    longitude:
-                                        item.handoverLocation!.longitude,
-                                  )
-                                : null,
-                            priority: item.priority,
-                            date: item.date,
-                            time: item.time,
-                            parcelImages: item.parcelImages,
-                            receiverName: item.receiverName,
-                            receiverPhone: item.receiverPhone,
-                            senderRemarks: item.senderRemarks,
-                            status: item.status,
-                            finalPrice: item.finalPrice,
-                            priceStatus: item.priceStatus,
-                            rejectionReason: item.rejectionReason,
-                            acceptedBy: item.acceptedBy,
-                            acceptedAt: item.acceptedAt,
-                            completedAt: item.completedAt,
-                            stripeCheckoutSessionId:
-                                item.stripeCheckoutSessionId,
-                            createdAt: item.createdAt,
-                            updatedAt: item.updatedAt,
-                            datumId: item.id,
-                          );
-                          AppRouter.route.pushNamed(
-                            RoutePath.trackParcelScreen,
-                            extra: driverParcelItem,
-                          );
-                        },
-                        onChatTap: () {
-                          MyParcelController.to.chatInitiateP2P(
-                            id: item.userId ?? "",
-                            parcel: item,
-                          );
-                        },
-                        onAcceptTap: () {
-                          controller.acceptParcel(id: item.id ?? "");
-                        },
+                        child: DriverRequestCard(
+                          parcelId: item.parcelId ?? "N/A",
+                          parcelName: item.parcelName ?? "N/A",
+                          size: item.size ?? "N/A",
+                          price: "\$${item.finalPrice ?? 0}",
+                          imageUrl:
+                              (item.parcelImages != null &&
+                                  item.parcelImages!.isNotEmpty)
+                              ? item.parcelImages!.first
+                              : "",
+                          isLoading:
+                              controller.acceptLoadingMap[item.id ?? ''] ==
+                              true,
+                          onImageTap: () {
+                            AppRouter.route.pushNamed(
+                              RoutePath.parcelDetailsScreen,
+                              extra: item,
+                            );
+                          },
+                          onTrackTap: () {
+                            final driverParcelItem =
+                                driver_parcel.DriverParcelItem(
+                                  id: item.id,
+                                  parcelId: item.parcelId,
+                                  parcelName: item.parcelName,
+                                  size: item.size,
+                                  vehicleType: item.vehicleType,
+                                  weight: item.weight?.toDouble(),
+                                  pickupLocation: item.pickupLocation != null
+                                      ? driver_parcel.Location(
+                                          address: item.pickupLocation!.address,
+                                          latitude:
+                                              item.pickupLocation!.latitude,
+                                          longitude:
+                                              item.pickupLocation!.longitude,
+                                        )
+                                      : null,
+                                  handoverLocation:
+                                      item.handoverLocation != null
+                                      ? driver_parcel.Location(
+                                          address:
+                                              item.handoverLocation!.address,
+                                          latitude:
+                                              item.handoverLocation!.latitude,
+                                          longitude:
+                                              item.handoverLocation!.longitude,
+                                        )
+                                      : null,
+                                  priority: item.priority,
+                                  date: item.date,
+                                  time: item.time,
+                                  parcelImages: item.parcelImages,
+                                  receiverName: item.receiverName,
+                                  receiverPhone: item.receiverPhone,
+                                  senderRemarks: item.senderRemarks,
+                                  status: item.status,
+                                  finalPrice: item.finalPrice,
+                                  priceStatus: item.priceStatus,
+                                  rejectionReason: item.rejectionReason,
+                                  acceptedBy: item.acceptedBy,
+                                  acceptedAt: item.acceptedAt,
+                                  completedAt: item.completedAt,
+                                  stripeCheckoutSessionId:
+                                      item.stripeCheckoutSessionId,
+                                  createdAt: item.createdAt,
+                                  updatedAt: item.updatedAt,
+                                  datumId: item.id,
+                                );
+                            AppRouter.route.pushNamed(
+                              RoutePath.trackParcelScreen,
+                              extra: driverParcelItem,
+                            );
+                          },
+                          onChatTap: () {
+                            MyParcelController.to.chatInitiateP2P(
+                              id: item.userId ?? "",
+                              parcel: item,
+                            );
+                          },
+                          onAcceptTap: () {
+                            controller.acceptParcel(id: item.id ?? "");
+                          },
+                        ),
                       ),
                     ),
                   );

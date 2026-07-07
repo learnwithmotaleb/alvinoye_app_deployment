@@ -98,8 +98,11 @@
   "date": "Date :",
   "time": "Time :",
   "pickup_location": "Pickup location :",
+  "sender_name": "Sender name :",
+  "sender_phone": "Sender Phone :",
   "receiver_name": "Receiver name :",
   "receiver_phone": "Receiver Phone :",
+
   "sender_remarks": "Sender remarks :",
   "confirm": "Confirm",
   "transaction_Complete": "Transaction Complete",

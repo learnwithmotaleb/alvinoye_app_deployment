@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:delivery_app/core/di/injection.dart';
 import 'package:delivery_app/core/router/route_path.dart';
 import 'package:delivery_app/core/router/routes.dart';
@@ -33,7 +34,7 @@ class CreateParcelController extends GetxController {
   Future<void> createParcel({required Map<String, dynamic> body}) async {
     setLoading(true);
 
-    final token = await localService.getToken();
+    final token = localService.getToken();
 
     try {
       final List<MultipartBody> multipart = [];
@@ -73,6 +74,53 @@ class CreateParcelController extends GetxController {
       }
     } catch (e) {
       setLoading(false);
+      AppToast.error(message: e.toString());
+    }
+  }
+
+  //
+  Future<void> updateParcel({
+    required String parcelId,
+    required Map<String, dynamic> body,
+  }) async {
+    setLoading(true);
+
+    final token = localService.getToken();
+
+    try {
+      final List<MultipartBody> multipart = [];
+
+      if (parcelImage.value != null && parcelImage.value!.path.isNotEmpty) {
+        multipart.add(
+          MultipartBody(
+            fieldKey: "parcel_images",
+            file: File(parcelImage.value!.path),
+          ),
+        );
+      }
+
+      final response = await apiClient.uploadMultipart(
+        url: ApiUrls.updateParcel(parcelId: parcelId),
+        files: multipart,
+        method: "PATCH",
+        token: token,
+        fields: body,
+      );
+
+      setLoading(false);
+
+      if (response.statusCode == 200) {
+        AppToast.success(
+          message: response.data?["message"] ?? "Parcel updated successfully",
+        );
+
+        AppRouter.route.pop();
+      } else {
+        AppToast.error(message: response.data?["message"] ?? "Update failed");
+      }
+    } catch (e) {
+      setLoading(false);
+
       AppToast.error(message: e.toString());
     }
   }

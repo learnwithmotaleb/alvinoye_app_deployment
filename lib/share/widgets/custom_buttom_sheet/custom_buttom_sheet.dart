@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:delivery_app/core/custom_assets/assets.gen.dart';
 import 'package:delivery_app/core/router/routes.dart';
 import 'package:delivery_app/share/widgets/button/custom_button.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/extension/base_extension.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 Widget makeDismissable({required Widget child}) => GestureDetector(
   behavior: HitTestBehavior.opaque,
@@ -59,9 +59,12 @@ class ConfirmationModalBottomSheet extends StatelessWidget {
 
     return makeDismissable(
       child: DraggableScrollableSheet(
-        initialChildSize: 0.40,
+        // initialChildSize: 0.40,
+        // minChildSize: 0.25,
+        // maxChildSize: 0.4,
+        initialChildSize: 0.45,
         minChildSize: 0.25,
-        maxChildSize: 0.4,
+        maxChildSize: 0.85,
         expand: false,
         builder: (_, controller) => Container(
           decoration: BoxDecoration(
