@@ -73,7 +73,7 @@ class ParcelCardList extends StatelessWidget {
                           (parcel.parcelImages != null &&
                               parcel.parcelImages!.isNotEmpty)
                           ? parcel.parcelImages!.first
-                          : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2Qp8paJgXVKLyyJkx4N7TOlv5izREplTlXw&s",
+                          : "",
                       height: 80.h,
                       width: 100.w,
                     ),

@@ -17,6 +17,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import '../driver_home/controller/driver_home_controller.dart';
+
 class ParcelDetailsScreen extends StatefulWidget {
   final String parcelId;
   const ParcelDetailsScreen({super.key, required this.parcelId});
@@ -27,7 +29,7 @@ class ParcelDetailsScreen extends StatefulWidget {
 
 class _ParcelDetailsScreenState extends State<ParcelDetailsScreen> {
   final ParcelDetailsController controller = Get.put(ParcelDetailsController());
-
+  final DriverHomeController driverHomeCtrl = Get.find();
   @override
   void initState() {
     super.initState();
@@ -295,14 +297,20 @@ class _ParcelDetailsScreenState extends State<ParcelDetailsScreen> {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
         child: SizedBox(
           width: double.infinity,
-          child: CustomButton(
-            onTap: () {
-              AppRouter.route.pushNamed(
-                RoutePath.parcelOtpScreen,
-                extra: widget.parcelId,
-              );
-            },
-            text: AppStrings.confirm.tr,
+          child: Obx(
+            () => CustomButton(
+              isLoading:
+                  driverHomeCtrl.acceptLoadingMap[widget.parcelId ?? ''] ==
+                  true,
+              onTap: () async {
+                await driverHomeCtrl.acceptParcel(id: widget.parcelId ?? "");
+                AppRouter.route.pushNamed(
+                  RoutePath.parcelOtpScreen,
+                  extra: widget.parcelId,
+                );
+              },
+              text: AppStrings.confirm.tr,
+            ),
           ),
         ),
       ),

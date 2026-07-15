@@ -48,7 +48,7 @@ class ActionButtonsSection extends StatelessWidget {
     log("parcel price in details page: in button section: $proposedPrice");
 
     // 👉 NEW CASE: Show only PAY button
-    if (isPending && isAccepted) {
+    if (isPending && isAccepted && !parcelDetails.isPaid) {
       return SizedBox(
         width: double.infinity,
         child: ElevatedButton(

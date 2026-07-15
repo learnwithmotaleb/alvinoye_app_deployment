@@ -22,7 +22,7 @@ class PaymentController extends GetxController {
       final token = localService.getToken();
       final response = await apiClient.post(
         url: ApiUrls.dpoCheckout(),
-        
+
         body: {'parcel_id': parcelId},
         token: token,
       );

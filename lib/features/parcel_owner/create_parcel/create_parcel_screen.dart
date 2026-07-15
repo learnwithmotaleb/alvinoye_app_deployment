@@ -23,6 +23,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 
+import '../../../helper/toast/toast_helper.dart';
 import '../../../utils/config/app_config.dart';
 import 'create_details_parcel/model/parcel_details_model.dart';
 
@@ -396,6 +397,24 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
                   isLoading: createParcelController.createParcelLoading.value,
                   onTap: () {
                     if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+
+                    if (selectedPickupLocation.value.address.isEmpty) {
+                      AppToast.error(
+                        message: "Please select a pickup location",
+                      );
+                      return;
+                    }
+
+                    if (selectedHandoverLocation.value.address.isEmpty) {
+                      AppToast.error(
+                        message: "Please select a handover location",
+                      );
+                      return;
+                    }
+                    if (_senderRemarksController.value.text.trim().isEmpty) {
+                      AppToast.error(message: "Sender Remarks is required");
                       return;
                     }
 

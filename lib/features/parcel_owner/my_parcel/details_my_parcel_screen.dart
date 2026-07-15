@@ -19,7 +19,6 @@ import 'package:delivery_app/share/widgets/text_field/custom_text_field.dart';
 import 'package:delivery_app/utils/app_strings/app_strings.dart';
 import 'package:delivery_app/utils/color/app_colors.dart';
 import 'package:delivery_app/utils/enum/app_enum.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -163,11 +162,14 @@ class _DetailsMyParcelScreenState extends State<DetailsMyParcelScreen> {
                       0.0;
                   final hasProposedPrice = proposedPrice > 0;
 
+                  debugPrint("parcelDetails.isPaid : ${parcelDetails.isPaid}");
+
                   //
                   final canShowPayButton =
                       hasProposedPrice &&
                       parcelDetails.status?.toUpperCase() == "PENDING" &&
-                      parcelDetails.priceStatus?.toUpperCase() == "ACCEPTED";
+                      parcelDetails.priceStatus?.toUpperCase() == "ACCEPTED" &&
+                      parcelDetails.isPaid == false;
 
                   //
                   log("proposedPrice of detail model parsed : $proposedPrice");
@@ -227,10 +229,6 @@ class _DetailsMyParcelScreenState extends State<DetailsMyParcelScreen> {
                                 Gap(16.h),
 
                                 // Action Buttons (Accept/Reject)
-                                if (kDebugMode)
-                                  Text(
-                                    "widget.parcel in aboutbuttonsection: $proposedPrice",
-                                  ),
                                 ActionButtonsSection(
                                   parcelStatus: parcelDetails.status,
                                   priceStatus: parcelDetails.priceStatus,

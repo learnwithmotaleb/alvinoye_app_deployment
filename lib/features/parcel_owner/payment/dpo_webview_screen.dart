@@ -85,9 +85,7 @@ class _DpoWebviewScreenState extends State<DpoWebviewScreen> {
             WebViewWidget(controller: _controller),
             if (_loading)
               const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
-                ),
+                child: CircularProgressIndicator(color: AppColors.primaryColor),
               ),
           ],
         ),

@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       Container(
-                        height: 199.h,
+                        // height: 210.h,
                         width: double.infinity,
                         color: AppColors.primaryColor,
                         child: Stack(
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                       ),
-                      Gap(56),
+                      Gap(70.h),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
