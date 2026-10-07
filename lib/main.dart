@@ -1,6 +1,7 @@
 import 'package:delivery_app/core/service/datasource/remote/app_permission_service.dart';
 import 'package:delivery_app/core/service/datasource/remote/socket_service.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
   DeviceUtils.lockDevicePortrait();
+
+  // ...
+
+  await Firebase.initializeApp();
 
   await LocalService.init(); // ✅ MUST be first
   initGetx();
